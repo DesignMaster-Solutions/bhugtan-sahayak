@@ -14,3 +14,4 @@ package.json
 wrangler.toml
 worker.js
 LICENSE
+*.bak
