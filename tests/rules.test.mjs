@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { likelyCauses, checksFor, fixFor, requestText, CAUSES, SCHEMES, SYMPTOMS, LAST, CHANGES, WHERE } from '../rules.js';
 
 const YNU = ['yes', 'no', 'unsure'];
-const changeSets = [[], ['none'], ...[1, 2, 3, 4, 5, 6, 7].map((m) => CHANGES.filter((_, i) => m & (1 << i)))];
+const changeSets = [[], ['none'], ...Array.from({ length: 2 ** CHANGES.length - 1 }, (_, k) => CHANGES.filter((_, i) => (k + 1) & (1 << i)))];
 
 // Every possible set of answers the screens can produce.
 const ALL = [];
@@ -24,14 +24,14 @@ function within(r, id, n, stronger, input) {
 const CAUSE_IDS = Object.keys(CAUSES);
 const base = { scheme: 'pension', symptom: 'stopped', lastReceived: 'under1y', changes: [] };
 
-test('the CHANGES list matches the question (new / closed / KYC)', () => {
-  assert.deepEqual(CHANGES, ['new_account', 'closed_account', 'kyc_pending']);
+test('the CHANGES list matches the question (new / closed / KYC / Aadhaar number / name)', () => {
+  assert.deepEqual(CHANGES, ['new_account', 'closed_account', 'kyc_pending', 'aadhaar_wrong', 'name_differs']);
 });
 
-test('every scheme x symptom gives 1 to 5 causes, no duplicates, all known', () => {
+test('every scheme x symptom gives 1 to 6 causes, no duplicates, all known', () => {
   for (const i of ALL) {
     const r = at(i);
-    assert.ok(r.length >= 1 && r.length <= 5, `${r.length} causes for ${label(i)}`);
+    assert.ok(r.length >= 1 && r.length <= 6, `${r.length} causes for ${label(i)}`);
     assert.equal(new Set(r).size, r.length, `duplicate in ${r}`);
     for (const id of r) assert.ok(CAUSE_IDS.includes(id), `unknown cause ${id}`);
   }
@@ -126,6 +126,49 @@ test('rule: never came with no other signal leads with "Aadhaar not mapped"', ()
     const i = { scheme, symptom: 'never_came', lastReceived, changes, ekyc: 'yes', land: 'yes' };
     assert.equal(at(i)[0], 'not_mapped', label(i));
   }
+});
+
+test('rule: a wrong Aadhaar number or a name written differently lists its cause, unless stronger leads fill the list', () => {
+  // Stronger: the leads the person's other answers trigger, all pushed before these two.
+  const stronger = ['credited_elsewhere', 'mapper_other_bank', 'pmkisan_ekyc', 'kyc_frozen', 'account_closed', 'deseeded', 'inoperative', 'mgnrega_abps', 'pmkisan_land'];
+  for (const i of ALL) {
+    const r = at(i);
+    if (i.changes.includes('aadhaar_wrong')) within(r, 'record_aadhaar', 6, [...stronger, 'name_mismatch'], i);
+    if (i.changes.includes('name_differs')) within(r, 'name_mismatch', 6, [...stronger, 'record_aadhaar'], i);
+  }
+  // Ticked alone, it comes right after the leads the person's other answers trigger.
+  assert.equal(at({ ...base, changes: ['aadhaar_wrong'] })[0], 'record_aadhaar');
+  assert.equal(at({ ...base, changes: ['name_differs'] })[0], 'name_mismatch');
+});
+
+test('rule: never came with no other signal also lists a name or bank details mismatch (Madhu, CIC 2025)', () => {
+  for (const scheme of SCHEMES) {
+    const i = { scheme, symptom: 'never_came', lastReceived: 'never', changes: [], ekyc: 'yes', land: 'yes' };
+    assert.ok(at(i).includes('name_mismatch'), label(i));
+  }
+});
+
+test('rule: rejected lists the credit limit (APB codes 57 / 58); a rejected scholarship lists it second', () => {
+  // MGNREGA keeps ABPS in the list (PIB 2112199), so its 6 places go to ABPS and the usual reasons.
+  for (const scheme of SCHEMES.filter((s) => s !== 'mgnrega')) {
+    const i = { scheme, symptom: 'rejected', lastReceived: 'under1y', changes: [], ekyc: 'yes', land: 'yes' };
+    assert.ok(at(i).includes('bank_limit'), label(i));
+  }
+  assert.equal(at({ scheme: 'scholarship', symptom: 'rejected', lastReceived: 'under1y', changes: [] })[1], 'bank_limit');
+  assert.deepEqual(fixFor('bank_limit').codes, ['57', '58']);
+  assert.ok(fixFor('bank_limit').where.includes('bank_branch'));
+  for (const p of ['limit_not_for_dbt', 'jandhan_bsbd']) assert.ok(fixFor('bank_limit').points.includes(p), p);
+});
+
+test('rule: "went to another account" also lists the UTR trace (money sent to a wrong account number)', () => {
+  for (const i of ALL) if (i.symptom === 'other_account' && !i.changes.length) assert.ok(at(i).includes('credited_elsewhere'), label(i));
+});
+
+test('a wrong Aadhaar number or name on the record is fixed at the scheme office, the name also at an Aadhaar centre', () => {
+  assert.deepEqual(fixFor('record_aadhaar').where, ['scheme_office']);
+  assert.deepEqual(fixFor('name_mismatch').where, ['scheme_office', 'aadhaar_centre']);
+  assert.match(requestText('record_aadhaar', 'en'), /correct the Aadhaar number/);
+  assert.match(requestText('name_mismatch', 'en'), /correct my name and bank details/);
 });
 
 test('inoperative fix says DBT counts, scholarship/DBT accounts exempt, KYC at any branch, no charge, three working days', () => {

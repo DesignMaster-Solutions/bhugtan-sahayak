@@ -5,8 +5,8 @@ import { STRINGS } from './i18n.js';
 export const SCHEMES = ['pmkisan', 'pension', 'mgnrega', 'scholarship', 'other'];
 export const SYMPTOMS = ['never_came', 'stopped', 'other_account', 'paid_not_received', 'rejected'];
 export const LAST = ['never', 'under1y', '1to2y', 'over2y'];
-export const CHANGES = ['new_account', 'closed_account', 'kyc_pending'];
-export const WHERE = ['bank_branch', 'ippb', 'csc', 'scheme_office'];
+export const CHANGES = ['new_account', 'closed_account', 'kyc_pending', 'aadhaar_wrong', 'name_differs'];
+export const WHERE = ['bank_branch', 'ippb', 'csc', 'scheme_office', 'aadhaar_centre'];
 
 const PIB = (id) => `https://www.pib.gov.in/PressReleasePage.aspx?PRID=${id}`;
 export const SOURCES = {
@@ -14,6 +14,7 @@ export const SOURCES = {
   uidai_faq: { name: 'UIDAI FAQ: Direct Benefit Transfer', url: 'https://uidai.gov.in/en/direct-benefit-transfer' },
   rbi_2024: { name: 'RBI circular of 1 January 2024 (RBI/2023-24/105)', url: 'https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12589&Mode=0' },
   ippb: { name: 'India Post Payments Bank: doorstep banking and DBT', url: 'https://www.ippbonline.com/' },
+  pib_1739603: { name: 'PIB 1739603 (27/07/2021): PM-KISAN transaction failures and the Correction Module', url: PIB(1739603) },
   pib_2152566: { name: 'PIB 2152566 (05/08/2025): PM-KISAN transaction failures', url: PIB(2152566) },
   pib_2112399: { name: 'PIB 2112399 (18/03/2025): PM-KISAN land seeding, Aadhaar payment and e-KYC mandatory', url: PIB(2112399) },
   pib_2330414: { name: 'PIB 2330414 (30/10/2026): PM-KISAN e-KYC by OTP, biometric or face', url: PIB(2330414) },
@@ -34,6 +35,19 @@ export const CAUSES = {
   pmkisan_land: { items: [6], codes: [], src: ['pib_2112399'], fix: ['scheme_office'], carry: [], letter: 'land', points: [] },
   mgnrega_abps: { items: [8, 4], codes: [], src: ['pib_2112199', 'uidai_faq'], fix: ['bank_branch', 'scheme_office'], carry: ['passbook', 'aadhaar_card'], letter: 'seed', points: ['nach'] },
   credited_elsewhere: { items: [6, 9], codes: [], src: ['pmkisan', 'pfms'], fix: ['bank_branch'], carry: ['passbook', 'utr'], letter: 'utr', points: [] },
+  record_aadhaar: { items: [13], codes: [], src: ['pib_2152566', 'pib_1739603'], fix: ['scheme_office'], carry: ['aadhaar_card'], letter: 'record', points: ['record_state'] },
+  name_mismatch: { items: [13, 14], codes: [], src: ['uidai_faq', 'pib_2152566'], fix: ['scheme_office', 'aadhaar_centre'], carry: ['passbook', 'aadhaar_card'], letter: 'name', points: ['record_state'] },
+  bank_limit: { items: [15], codes: ['57', '58'], src: ['apb_sop'], fix: ['bank_branch'], carry: ['passbook', 'aadhaar_card'], letter: 'limit', points: ['limit_not_for_dbt', 'jandhan_bsbd'] },
+};
+
+// Shown on every result: two published decisions where arrears were cut after a failed payment (item 16).
+const IK = (doc) => `https://indiankanoon.org/doc/${doc}/`;
+export const ARREARS = {
+  note: 'arrears_note',
+  source: [
+    { name: 'CIC, 3 Oct 2019: widow pension, Delhi (6 months)', url: IK(55862438) },
+    { name: 'CIC, 16 Jan 2025: disability pension, Delhi (1 year)', url: IK(26867350) },
+  ],
 };
 
 const SCHEME_CHECK = { pmkisan: 'pmkisan_status', pension: 'nsap', mgnrega: 'nrega', scholarship: 'pfms', other: 'pfms' };
@@ -58,6 +72,9 @@ const CAUSE_CHECKS = {
   pmkisan_land: () => ['pmkisan_status'],
   mgnrega_abps: () => ['nrega', ...SEEDING],
   credited_elsewhere: (s) => [s, 'pfms'],
+  record_aadhaar: (s) => [s],
+  name_mismatch: (s) => [s, 'pfms'],
+  bank_limit: (s) => [s, 'pfms'],
 };
 
 const has = (arr, x) => Array.isArray(arr) && arr.includes(x);
@@ -74,22 +91,27 @@ export function likelyCauses({ scheme, symptom, lastReceived, changes = [], ekyc
   if (has(changes, 'new_account')) push('mapper_other_bank');
   if (has(changes, 'kyc_pending')) push('kyc_frozen');
   if (has(changes, 'closed_account')) push('account_closed', 'deseeded');
+  if (has(changes, 'aadhaar_wrong')) push('record_aadhaar');
+  if (has(changes, 'name_differs')) push('name_mismatch');
   if (old) push('inoperative');
   // Base lead per symptom, then the scheme blocks, then the rest of the usual reasons (PIB 2152566 order).
   const BASE = {
-    never_came: ['not_mapped', 'mapper_other_bank'],
+    never_came: ['not_mapped', 'mapper_other_bank', 'name_mismatch'],
     stopped: ['deseeded', 'not_mapped', 'account_closed'],
-    other_account: ['mapper_other_bank'],
+    other_account: ['mapper_other_bank', 'credited_elsewhere'],
     paid_not_received: ['credited_elsewhere', 'mapper_other_bank', 'account_closed'],
-    rejected: ['not_mapped', 'deseeded', 'account_closed', 'kyc_frozen', 'inoperative'],
+    rejected: ['not_mapped', 'deseeded', 'account_closed', 'kyc_frozen', 'inoperative', 'bank_limit'],
   }[symptom] || ['not_mapped'];
   push(BASE[0]);
   if (scheme === 'mgnrega') push('mgnrega_abps');
   if (pm && land !== 'yes') push('pmkisan_land');
+  // Scholarship accounts are to be free of a total credit limit (APB SOP), so a bounced scholarship checks it early.
+  if (scheme === 'scholarship' && symptom === 'rejected') push('bank_limit');
   push(...BASE.slice(1));
-  // At most 5; trim from the end but never drop a cause the answers make certain to list.
+  // At most 6 (the official PM-KISAN failure list a farmer can fix has 6); trim from the end but never drop a
+  // cause the answers make certain to list.
   const must = new Set([old && 'inoperative', scheme === 'mgnrega' && 'mgnrega_abps', pm && land !== 'yes' && 'pmkisan_land'].filter(Boolean));
-  while (out.length > 5) {
+  while (out.length > 6) {
     const i = out.findLastIndex((id) => !must.has(id));
     out.splice(i, 1);
   }

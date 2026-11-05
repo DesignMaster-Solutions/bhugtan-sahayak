@@ -163,3 +163,23 @@ appear in the app as a rule, number, path or fee.
     transactions; cumulative ₹54,15,957 Cr.
 12. **Removed:** mylpg.in is no longer an official site (now a blog); LPG gets only the generic
     Aadhaar-payment checks (1-5, 9). No official count of MGNREGA ABPS rejections was found.
+13. **Wrong data on the scheme record (added 05/11/2026).** PIB 2152566: "In case of any discrepancy in
+    data, the record is sent back to State/UT for correction and on receipt of the corrected data, the
+    benefits are released immediately with the upcoming release." PIB 1739603: failure records "are
+    opened to respective State/UT for correction under the “Correction Module” tab of PM-KISAN portal".
+    The Nanuaram decision (evidence/real-cases) shows the step: "upload the correct form with valid
+    AADHAR number". (`sources/pib_2152566_pmkisan_failed_txn.txt`, `sources/pib_1739603_pmkisan_failed_2021.txt`)
+14. **Name differs between Aadhaar and the scheme.** UIDAI DBT FAQ: "My name is different in Aadhaar
+    vis-à-vis service delivery database. What should I do? For correction of your name in Aadhaar, you may
+    visit the nearest Aadhaar Enrolment Centre to update your name". (`sources/uidai_dbt_faq.txt`)
+15. **Credit limit (APB codes 57 and 58).** APB SOP v3.0.2, return-code guidelines: 57 "Amount Exceeds
+    limit set on Account by Bank for Credit per Transaction", 58 "Account reached maximum Credit limit set
+    on account by Bank"; "the limit on balances shall not be considered while making deposit through
+    government grants, welfare benefits and payment against procurements" (G.S.R 1038, 21.8.2017); "All
+    KYC updated PMJDY accounts are to be converted to regular BSBD accounts, instead of treating them as
+    small accounts"; scholarship accounts "free from restrictions of minimum balance and total credit
+    limit" (RBI circular of 10.09.2014). (`sources/dbtbharat_APB_SOP.txt`)
+16. **Arrears cut after a failed payment.** Two decisions, texts in `evidence/real-cases/sources/`:
+    CIC 3 Oct 2019 (Delhi widow pension): "amount pertaining to only 6 months is provided in such cases";
+    CIC 16 Jan 2025 (Delhi disability pension, office order of 04.08.2023): "arrears for a maximum period of
+    one year only". The app warns to act soon and names no amount.

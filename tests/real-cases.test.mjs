@@ -2,7 +2,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { likelyCauses, checksFor, fixFor, CAUSES, SCHEMES, SYMPTOMS, LAST } from '../rules.js';
+import { likelyCauses, checksFor, fixFor, CAUSES, ARREARS, SCHEMES, SYMPTOMS, LAST, CHANGES } from '../rules.js';
+import { STRINGS } from '../i18n.js';
 
 const dir = new URL('../evidence/real-cases/', import.meta.url);
 const { cases } = JSON.parse(readFileSync(new URL('cases.json', dir), 'utf8'));
@@ -31,9 +32,10 @@ for (const c of cases) {
     assert.ok(SCHEMES.includes(c.answers.scheme), c.answers.scheme);
     assert.ok(c.answers.symptom === null || SYMPTOMS.includes(c.answers.symptom));
     assert.ok(c.answers.lastReceived === null || LAST.includes(c.answers.lastReceived));
+    for (const ch of c.answers.changes) assert.ok(CHANGES.includes(ch), ch);
     for (const id of c.causes) assert.ok(CAUSES[id], id);
-    // A cause the app has must come with its kind; a gap or an unstated cause has none.
-    assert.equal(c.causes.length === 0, ['name_or_aadhaar_mismatch', 'bank_limit', 'not_stated'].includes(c.blocked_by), c.blocked_by);
+    // Every stated cause is now a reason the app has; only an unstated cause has none.
+    assert.equal(c.causes.length === 0, c.blocked_by === 'not_stated', c.blocked_by);
     assert.ok(c.divergence?.length > 20, 'every case records where the app and the decision differ');
   });
 
@@ -49,10 +51,18 @@ for (const c of cases) {
       if (p.check) assert.ok(checksFor(p.cause, c.answers.scheme).some((k) => k.id === p.check), `${p.cause}: no check ${p.check}`);
       if (p.letter) assert.equal(CAUSES[p.cause].letter, p.letter, p.cause);
     }
-    // A bank return code the app has no reason for stays a gap until a cause shows it.
-    if (c.code) assert.ok(!Object.values(CAUSES).some((x) => x.codes.includes(c.code)), `code ${c.code} is now shown; update ${c.id}`);
+    // The bank return code the decision gives is shown by the cause the app gives for it.
+    if (c.code) assert.ok(c.causes.some((id) => CAUSES[id].codes.includes(c.code)), `code ${c.code} not shown for ${c.id}`);
   });
 }
+
+test('the arrears warning cites exactly the decisions that cut arrears, and names no amount', () => {
+  const cut = cases.filter((c) => c.arrears_limit);
+  assert.deepEqual(cut.map((c) => [c.id, c.arrears_limit]), [['cic-2019-sushila', '6 months'], ['cic-2025-madhu-devki', '1 year']]);
+  assert.deepEqual(ARREARS.source.map((s) => s.url), cut.map((c) => c.url));
+  assert.match(STRINGS.en[ARREARS.note], /6 months.*1 year/);
+  assert.match(STRINGS.hi[ARREARS.note], /6 महीने.*1 साल/);
+});
 
 // The numbers the README and the status write; computed here so a wrong number fails.
 function aggregates() {
@@ -63,7 +73,7 @@ function aggregates() {
   const knownRanks = known.map((c) => rank(c.replay[c.answers.symptom], c.causes[0]));
   const anyShown = unknown.filter((c) => SYMPTOMS.some((s) => rank(c.replay[s], c.causes[0])));
   return {
-    total: cases.length, named: named.length, gaps: by('name_or_aadhaar_mismatch') + by('bank_limit'), notStated: by('not_stated'),
+    total: cases.length, named: named.length, gaps: cases.filter((c) => !c.causes.length && c.blocked_by !== 'not_stated').length, notStated: by('not_stated'),
     knownShown: knownRanks.filter(Boolean).length, known: known.length, first: knownRanks.filter((r) => r === 1).length,
     unknown: unknown.length, unknownShown: anyShown.length,
     people: cases.reduce((s, c) => s + (c.people || 0), 0),
@@ -74,7 +84,7 @@ function aggregates() {
 
 test('aggregate numbers as computed today (change the README and status together)', () => {
   assert.deepEqual(aggregates(), {
-    total: 12, named: 7, gaps: 3, notStated: 2, knownShown: 3, known: 4, first: 1, unknown: 3, unknownShown: 3, people: 11, pmkisan: 6,
+    total: 12, named: 10, gaps: 0, notStated: 2, knownShown: 6, known: 7, first: 1, unknown: 3, unknownShown: 3, people: 11, pmkisan: 6,
     kinds: { aadhaar_not_seeded: 2, aadhaar_other_account: 1, scheme_ekyc_or_land: 2, wrong_account_or_diverted: 2, name_or_aadhaar_mismatch: 2, bank_limit: 1, not_stated: 2 },
   });
 });

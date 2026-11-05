@@ -1,5 +1,5 @@
 {
- "_about": "Real published decisions (High Courts and the Central Information Commission) where a beneficiary did not get, or stopped getting, a government DBT payment. Every fact comes from the decision text saved in sources/<doc>.txt; null means the decision does not say it. 'answers' are what the person would enter on the app's screens, only from facts in the decision (symptom null = the decision does not say what the person saw, so the replay covers every symptom). 'causes' are the app's cause ids for what the decision says stopped the money ([] = not stated, or not a reason the app has). 'replay' is what rules.js likelyCauses gives for those answers on 2026-11-05. 'app_path' is the fix, check and letter the app gives for a cause, checked against rules.js. Collected from indiankanoon.org on 2026-11-05.",
+ "_about": "Real published decisions (High Courts and the Central Information Commission) where a beneficiary did not get, or stopped getting, a government DBT payment. Every fact comes from the decision text saved in sources/<doc>.txt; null means the decision does not say it. 'answers' are what the person would enter on the app's screens, only from facts in the decision (symptom null = the decision does not say what the person saw, so the replay covers every symptom). 'causes' are the app's cause ids for what the decision says stopped the money ([] = not stated, or not a reason the app has). 'replay' is what rules.js likelyCauses gives for those answers on 2026-11-05 (after the three new causes and the limit of 6 reasons). 'app_path' is the fix, check and letter the app gives for a cause, checked against rules.js. Collected from indiankanoon.org on 2026-11-05 (after the three new causes and the limit of 6 reasons).",
  "cases": [
   {
    "id": "up-hc-2026-vishram-singh",
@@ -48,7 +48,8 @@
     "never_came": [
      "pmkisan_ekyc",
      "not_mapped",
-     "mapper_other_bank"
+     "mapper_other_bank",
+     "name_mismatch"
     ]
    }
   },
@@ -106,14 +107,15 @@
      "where": "scheme_office"
     }
    ],
-   "divergence": "The decision does not say what his status page showed. The app shows 'sent, maybe to a different account' only if he answers that the status says paid; for any other answer it leads with e-KYC and land, the two reasons the State gave first. The app's step for a wrong account is to trace the UTR at the bank; here the agriculture office corrected the account and the court ordered the State, not the bank, to pay. For land the State named verification from the tehsil; the app says the village or block agriculture office.",
+   "divergence": "The decision does not say what his status page showed. The app shows 'sent, maybe to a different account' if he answers that the status says paid (first) or that it went to another account (fourth, after the NPCI mapper, e-KYC and land); for the other answers it leads with e-KYC and land, the two reasons the State gave first. The app's step for a wrong account is to trace the UTR at the bank; here the agriculture office corrected the account and the court ordered the State, not the bank, to pay. For land the State named verification from the tehsil; the app says the village or block agriculture office.",
    "code": null,
    "replay": {
     "never_came": [
      "pmkisan_ekyc",
      "not_mapped",
      "pmkisan_land",
-     "mapper_other_bank"
+     "mapper_other_bank",
+     "name_mismatch"
     ],
     "stopped": [
      "pmkisan_ekyc",
@@ -125,7 +127,8 @@
     "other_account": [
      "mapper_other_bank",
      "pmkisan_ekyc",
-     "pmkisan_land"
+     "pmkisan_land",
+     "credited_elsewhere"
     ],
     "paid_not_received": [
      "credited_elsewhere",
@@ -139,7 +142,8 @@
      "not_mapped",
      "pmkisan_land",
      "deseeded",
-     "account_closed"
+     "account_closed",
+     "kyc_frozen"
     ]
    }
   },
@@ -188,7 +192,8 @@
      "inoperative",
      "deseeded",
      "pmkisan_land",
-     "not_mapped"
+     "not_mapped",
+     "account_closed"
     ]
    }
   },
@@ -217,18 +222,29 @@
     "scheme": "pmkisan",
     "symptom": "stopped",
     "lastReceived": null,
-    "changes": [],
+    "changes": [
+     "aadhaar_wrong"
+    ],
     "ekyc": null,
     "land": null
    },
-   "causes": [],
+   "causes": [
+    "record_aadhaar"
+   ],
    "court_path": "file a fresh PM-KISAN form with the correct Aadhaar number",
-   "app_path": [],
-   "divergence": "Gap: the app has no reason for a wrong Aadhaar number on the scheme record. It shows e-KYC, de-seeding, land, seeding and a closed account, and none of its steps says to correct the Aadhaar number with the agriculture office.",
+   "app_path": [
+    {
+     "cause": "record_aadhaar",
+     "where": "scheme_office",
+     "letter": "record"
+    }
+   ],
+   "divergence": "He knew he had given two Aadhaar numbers, so he can tick 'I gave the scheme a different Aadhaar number'; the app then lists 'the Aadhaar number on your scheme record is wrong' second, after e-KYC, and sends him to the agriculture office with a letter asking to correct the number or say which form to fill again, which is what the State told him (a fresh form with a valid Aadhaar number). Without that tick the app does not list it.",
    "code": null,
    "replay": {
     "stopped": [
      "pmkisan_ekyc",
+     "record_aadhaar",
      "deseeded",
      "pmkisan_land",
      "not_mapped",
@@ -293,7 +309,8 @@
      "inoperative",
      "deseeded",
      "pmkisan_land",
-     "not_mapped"
+     "not_mapped",
+     "account_closed"
     ]
    }
   },
@@ -341,7 +358,8 @@
      "pmkisan_ekyc",
      "not_mapped",
      "pmkisan_land",
-     "mapper_other_bank"
+     "mapper_other_bank",
+     "name_mismatch"
     ]
    }
   },
@@ -439,7 +457,7 @@
      "check": "myaadhaar"
     }
    ],
-   "divergence": "Answering 'stopped', she would not see 'seeded to another bank account'; it shows only if she answers that the money goes to another account. The app's second reason (de-seeding) sends her to myAadhaar Bank seeding status, which shows the bank her Aadhaar is seeded to, here SBI. The app says nothing about arrears or the 6 month rule.",
+   "divergence": "Answering 'stopped', she would not see 'seeded to another bank account'; it shows only if she answers that the money goes to another account. The app's second reason (de-seeding) sends her to myAadhaar Bank seeding status, which shows the bank her Aadhaar is seeded to, here SBI. The result warns that some departments pay arrears for only 6 months or 1 year, citing this decision.",
    "code": null,
    "replay": {
     "stopped": [
@@ -448,7 +466,8 @@
      "not_mapped",
      "account_closed"
     ]
-   }
+   },
+   "arrears_limit": "6 months"
   },
   {
    "id": "cic-2025-madhu-devki",
@@ -483,22 +502,27 @@
     "ekyc": null,
     "land": null
    },
-   "causes": [],
+   "causes": [
+    "name_mismatch"
+   ],
    "court_path": "compensation for the years lost; the Commission called the one year arrears order contrary to the citizen charter",
    "app_path": [
     {
-     "cause": "not_mapped",
-     "check": "myaadhaar"
+     "cause": "name_mismatch",
+     "where": "scheme_office",
+     "letter": "name"
     }
    ],
-   "divergence": "Gap: the app has no reason for a name or bank details that do not match the scheme record, and does not warn that a remittance failure can cost all but one year of arrears.",
+   "divergence": "The decision does not say she knew about the mismatch, so the replay ticks nothing: for 'it never came' the app lists 'your name or bank details do not match the scheme record' third, sending her to the scheme office (and to an Aadhaar centre if the name on her Aadhaar is the wrong one). The result warns that some departments pay arrears for only 6 months or 1 year after a failed payment, citing this decision; it does not say compensation can be claimed, which is what the Commission ordered.",
    "code": null,
    "replay": {
     "never_came": [
      "not_mapped",
-     "mapper_other_bank"
+     "mapper_other_bank",
+     "name_mismatch"
     ]
-   }
+   },
+   "arrears_limit": "1 year"
   },
   {
    "id": "cic-2020-shrinivas-mishra",
@@ -546,7 +570,8 @@
    "replay": {
     "never_came": [
      "not_mapped",
-     "mapper_other_bank"
+     "mapper_other_bank",
+     "name_mismatch"
     ],
     "stopped": [
      "deseeded",
@@ -554,7 +579,8 @@
      "account_closed"
     ],
     "other_account": [
-     "mapper_other_bank"
+     "mapper_other_bank",
+     "credited_elsewhere"
     ],
     "paid_not_received": [
      "credited_elsewhere",
@@ -566,7 +592,8 @@
      "deseeded",
      "account_closed",
      "kyc_frozen",
-     "inoperative"
+     "inoperative",
+     "bank_limit"
     ]
    }
   },
@@ -610,12 +637,13 @@
      "letter": "utr"
     }
    ],
-   "divergence": "These are allegations in an FIR, not findings. A pensioner sees 'sent to a different account' only by answering that the status says paid; the app's step is to trace the UTR at the bank, and it has no step for an account changed by an official (complaint to the District Magistrate or police).",
+   "divergence": "These are allegations in an FIR, not findings. A pensioner sees 'sent to a different account' by answering that the status says paid (first) or that it went to another account (second); the app's step is to trace the UTR at the bank, and it has no step for an account changed by an official (complaint to the District Magistrate or police).",
    "code": null,
    "replay": {
     "never_came": [
      "not_mapped",
-     "mapper_other_bank"
+     "mapper_other_bank",
+     "name_mismatch"
     ],
     "stopped": [
      "deseeded",
@@ -623,7 +651,8 @@
      "account_closed"
     ],
     "other_account": [
-     "mapper_other_bank"
+     "mapper_other_bank",
+     "credited_elsewhere"
     ],
     "paid_not_received": [
      "credited_elsewhere",
@@ -635,7 +664,8 @@
      "deseeded",
      "account_closed",
      "kyc_frozen",
-     "inoperative"
+     "inoperative",
+     "bank_limit"
     ]
    }
   },
@@ -668,14 +698,23 @@
     "ekyc": null,
     "land": null
    },
-   "causes": [],
+   "causes": [
+    "bank_limit"
+   ],
    "code": "57",
    "court_path": "the State must pay; a failed credit is not a reason to deny the scholarship",
-   "app_path": [],
-   "divergence": "Gap already listed in tests/official-reasons.test.mjs: APB code 57 (amount exceeds the limit set on the account) has no reason in the app, so no step tells the student to ask the bank to lift the limit.",
+   "app_path": [
+    {
+     "cause": "bank_limit",
+     "where": "bank_branch",
+     "letter": "limit"
+    }
+   ],
+   "divergence": "For a rejected scholarship the app lists 'your bank account has a credit limit' second, with codes 57 and 58, the NPCI rule that the limit is not to be considered for welfare benefits, and a letter asking the branch to lift it and complete KYC. Only part of his money bounced, and the app has no answer for 'only part came'; the court ordered the State to pay, a step the app does not give.",
    "replay": {
     "rejected": [
      "not_mapped",
+     "bank_limit",
      "deseeded",
      "account_closed",
      "kyc_frozen",

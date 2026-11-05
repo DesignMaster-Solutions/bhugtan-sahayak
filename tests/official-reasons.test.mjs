@@ -17,7 +17,8 @@ const OFFICIAL = [
   { src: 'PIB 1739603', reason: 'Account Blocked or Frozen', code: '68', cause: 'kyc_frozen' },
   // The APB SOP lets a bank link a "fresh insert /inactive Aadhaar number" where the customer has given consent.
   { src: 'PIB 1739603', reason: 'Inactive Aadhar', cause: 'not_mapped' },
-  { src: 'PIB 1739603', reason: 'Amount exceeds limit set on Account by Bank for Credit/Debit per transaction', code: '57', cause: null, why: 'gap' },
+  // The APB SOP: the limit on balances is not to be considered for welfare benefits (G.S.R. 1038, 21.08.2017).
+  { src: 'PIB 1739603', reason: 'Amount exceeds limit set on Account by Bank for Credit/Debit per transaction', code: '57', cause: 'bank_limit' },
   // Aadhaar based payment is mandatory for PM-KISAN (PIB 2112399): the mapper routes it, not the IFSC.
   { src: 'PIB 1739603', reason: 'Invalid IFSC', cause: null, why: 'not under Aadhaar based payment' },
   { src: 'PIB 1739603', reason: 'Account Holder Expired', cause: null, why: 'not for the beneficiary to fix' },
@@ -45,5 +46,5 @@ test('coverage numbers in the README', () => {
   const y2025 = OFFICIAL.filter((o) => o.src === 'PIB 2152566');
   const y2021 = OFFICIAL.filter((o) => o.src === 'PIB 1739603');
   assert.deepEqual([y2025.filter((o) => o.cause).length, y2025.length], [3, 3]);
-  assert.deepEqual([y2021.filter((o) => o.cause).length, y2021.filter((o) => o.why === 'gap').length, y2021.filter((o) => !o.cause && o.why !== 'gap').length, y2021.length], [5, 1, 3, 9]);
+  assert.deepEqual([y2021.filter((o) => o.cause).length, y2021.filter((o) => o.why === 'gap').length, y2021.filter((o) => !o.cause && o.why !== 'gap').length, y2021.length], [6, 0, 3, 9]);
 });

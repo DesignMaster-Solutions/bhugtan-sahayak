@@ -39,12 +39,15 @@ bank credit, the step this app is about.
   order does not give. 6 PM-KISAN cases, 4 pensions, 1 LPG subsidy, 1 scholarship.
 - What stopped the money, by kind: Aadhaar not seeded: 2, Aadhaar seeded to another account: 1, e-KYC or land:
   2, wrong account or diverted: 2, name or Aadhaar number mismatch: 2, bank credit limit: 1, not stated: 2.
-- The cause named in the decision is a reason the app has in 7 of 12. 3 gaps (a wrong Aadhaar number on the
-  scheme record, a name and bank details mismatch, a bank credit limit) and not stated: 2.
-- Where the decision says what the person saw (4 of the 7), the app lists the cause for those answers in 3 of 4,
-  first in 1 (Vishram Singh: e-KYC first; Geeta: Aadhaar not seeded second; Rajendra: land fourth; Sushila: not
-  listed). Where it does not say (3 of 7), the cause is listed for at least one answer in 3 of 3; for the two
-  wrong-account cases only if the person answers that the status says paid.
+- The cause named in the decision is a reason the app has in 10 of 12, and not stated: 2. The first replay (commit
+  `8f27c1d`) found 3 gaps: a wrong Aadhaar number on the scheme record, a name and bank details mismatch, a bank
+  credit limit. Each is now a reason with an official source, so 0 gaps remain among the stated causes.
+- Where the decision says what the person saw (7 of the 10), the app lists the cause for those answers in 6 of 7,
+  first in 1 (Vishram Singh: e-KYC first; Geeta: Aadhaar not seeded second; Nanuaram: wrong Aadhaar number on
+  the record second, if he ticks that he gave a different number; Amit Yadav: credit limit second; Madhu: name
+  or bank details mismatch third; Rajendra: land fourth; Sushila: not listed). Where it does not say (3 of 10),
+  the cause is listed for at least one answer in 3 of 3; for the two wrong-account cases if the person answers
+  that the status says paid or that it went to another account.
 - Money stated in the decisions: 23 instalments (Vishram Singh), 9 instalments (Om Prakash Dubey), Rs 50,000
   (Amit Yadav), Rs 92,000 compensation (Madhu), Rs 2.52 crore alleged (Shahjahanpur).
 
@@ -52,17 +55,33 @@ bank credit, the step this app is about.
 
 Every case has a `divergence` in `cases.json`. The main ones:
 
-- **Gaps.** The app has no reason for a wrong Aadhaar number on the scheme record (Nanuaram), a name or bank
-  details that do not match (Madhu), or a credit limit on the account (Amit Yadav, APB code 57, already the gap
-  in "Official failure reasons, replayed").
-- **Money sent to another account shows only after "status says paid".** For Om Prakash Dubey and the
-  Shahjahanpur pensioners the decision does not say what they saw; for any other answer the app does not list
-  "sent, maybe to a different account". Sushila, answering "stopped", would not see "seeded to another bank
-  account", although the check for the app's second reason (myAadhaar Bank seeding status) shows which bank the
-  Aadhaar is seeded to.
+- **The 3 gaps, closed.** Each new reason has an official source, read and saved in `sources/`, and its own
+  letter:
+  - wrong Aadhaar number on the scheme record (Nanuaram): `record_aadhaar`, at the scheme office (for PM-KISAN
+    the agriculture office), because "In case of any discrepancy in data, the record is sent back to State/UT
+    for correction" (PIB 2152566) through the "Correction Module" of the PM-KISAN portal (PIB 1739603). It shows
+    when the person ticks "I gave the scheme a different Aadhaar number"; without that tick it is not listed.
+  - name or bank details that do not match (Madhu): `name_mismatch`, at the scheme office, or at an Aadhaar
+    Enrolment / Update Centre if the name on the Aadhaar is the wrong one (UIDAI DBT FAQ, "My name is different
+    in Aadhaar vis-à-vis service delivery database"). Listed third for "it never came" with nothing ticked, first
+    when the person ticks "My name is written differently".
+  - credit limit on the account (Amit Yadav): `bank_limit`, APB codes 57 and 58, at the bank branch: the APB
+    SOP says "the limit on balances shall not be considered while making deposit through government grants,
+    welfare benefits" and that "All KYC updated PMJDY accounts are to be converted to regular BSBD accounts".
+    Listed for "it was rejected", second for a scholarship.
+- **Arrears cut after a failed payment.** Every result now says "Act soon. In two published decisions, after a
+  failed payment the department paid arrears for only 6 months (a widow pension) or at most 1 year (a
+  disability pension)", linking Sushila's and Madhu's decisions. It names no amount and promises nothing; it
+  does not say that compensation or interest can be claimed, as the courts gave Vishram Singh and Madhu.
+- **Money sent to another account.** For Om Prakash Dubey and the Shahjahanpur pensioners the decision does not
+  say what they saw. The app lists "sent, maybe to a different account" first for "status says paid" and, since
+  this round, also for "it went to another account" (after the NPCI mapper); for the other answers it does not.
+  Sushila, answering "stopped", would not see "seeded to another bank account", although the check for the app's
+  second reason (myAadhaar Bank seeding status) shows which bank the Aadhaar is seeded to.
+- **Only part came.** Amit Yadav got Rs 4,400 of Rs 54,400; the app has no answer for "only part came", so the
+  replay uses "it was rejected".
 - **Officials' steps the app does not cover.** A "stop payment" put on the portal with no reason (Dharam Lal
-  Patel), accounts changed by an official (Shahjahanpur), and arrears limited to 6 months (Sushila) or one year
-  (Madhu) after a failed remittance: the app has no step for these.
+  Patel) and accounts changed by an official (Shahjahanpur): the app has no step for these.
 - **Where it matches.** e-KYC at a CSC or in the PM-KISAN app (Vishram Singh), land verification at the
   agriculture office (Rajendra; for Om Prakash Dubey the State named the tehsil), Aadhaar seeding at the bank branch (Geeta, Shrinivas Mishra),
   and the bank branch when the bank did not respond (Rajendra, as the CPIO advised).

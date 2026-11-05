@@ -53,7 +53,7 @@ npx wrangler deploy
 
 `rules.js` holds pure functions with no DOM:
 
-- `likelyCauses({scheme, symptom, lastReceived, changes, ekyc, land})` returns 1 to 5 cause ids,
+- `likelyCauses({scheme, symptom, lastReceived, changes, ekyc, land})` returns 1 to 6 cause ids,
   most likely first.
 - `checksFor(cause, scheme)` returns the official checks `{name, url, path, needs}`.
 - `fixFor(cause)` returns `{fix, where, carry, points, codes, source}`.
@@ -67,11 +67,18 @@ npx wrangler deploy
 2. "Went to another account": the NPCI mapper (`mapper_other_bank`), always first.
 3. PM-KISAN with e-KYC not done or not sure: `pmkisan_ekyc`.
 4. Opened a new account: `mapper_other_bank`. Bank asked for KYC papers: `kyc_frozen`.
-   Closed an account: `account_closed` and `deseeded`.
+   Closed an account: `account_closed` and `deseeded`. Gave the scheme a different Aadhaar number:
+   `record_aadhaar`. Name written differently: `name_mismatch`.
 5. Last received over two years ago (or 1 to 2 years ago and it stopped): `inoperative`.
 6. Then the usual lead for the symptom (never came: `not_mapped`; stopped: `deseeded`; rejected:
-   `not_mapped`), MGNREGA `mgnrega_abps`, PM-KISAN land `pmkisan_land`, and the other reasons PIB
-   2152566 names (de-seeding, non-mapping, account closure).
+   `not_mapped`), MGNREGA `mgnrega_abps`, PM-KISAN land `pmkisan_land`, a rejected scholarship
+   `bank_limit`, and the other reasons PIB 2152566 names (de-seeding, non-mapping, account closure),
+   then never came `name_mismatch`, went to another account `credited_elsewhere`, rejected `bank_limit`.
+7. At most 6 reasons (the official PM-KISAN failure list a farmer can fix has 6), trimmed from the end.
+
+Every result also shows one warning: "Act soon. In two published decisions, after a failed payment the
+department paid arrears for only 6 months (a widow pension) or at most 1 year (a disability pension)", with
+links to the two decisions (`ARREARS` in `rules.js`, item 16).
 
 The tests enforce each of these as a hard rule (see *Tests*).
 
@@ -94,6 +101,10 @@ pfms.nic.in, nsap.nic.in, ippbonline.com and npci.org.in do not answer from outs
 | `pmkisan_land` | Land seeding mandatory; ask your village / block agriculture office | 6 | PIB 2112399 |
 | `mgnrega_abps` | ABPS mandatory from 1 January 2024; if APBS fails, NACH to the account | 8 | PIB 2112199, <https://www.pib.gov.in/PressReleasePage.aspx?PRID=2112199> |
 | `credited_elsewhere` | Note the UTR and bank on Know Your Status or PFMS Know Your Payments and take the UTR to that bank | 6, 9 | PM-KISAN Know Your Status; PFMS Know Your Payments |
+| `record_aadhaar` | The Aadhaar number on the scheme record is wrong; a record with wrong data goes back to the State for correction; ask the scheme office (agriculture office for PM-KISAN) to correct it or say which form to fill again | 13 | PIB 2152566; PIB 1739603 ("Correction Module"), <https://www.pib.gov.in/PressReleasePage.aspx?PRID=1739603> |
+| `name_mismatch` | Name or bank details do not match the scheme record; scheme office corrects the record, an Aadhaar Enrolment / Update Centre corrects the name on Aadhaar | 13, 14 | UIDAI DBT FAQ; PIB 2152566 |
+| `bank_limit` | Return codes 57 / 58; the limit on balances is not to be considered for welfare benefits; scholarship accounts free of a total credit limit; KYC-updated PMJDY accounts to become regular BSBD accounts | 15 | APB SOP (return-code guidelines, citing G.S.R. 1038 of 21.08.2017 and RBI circular of 10.09.2014) |
+| arrears warning (every result) | Some departments paid arrears for only 6 months or at most 1 year after a failed payment | 16 | CIC decisions of 3 Oct 2019 (<https://indiankanoon.org/doc/55862438/>) and 16 Jan 2025 (<https://indiankanoon.org/doc/26867350/>), texts in `evidence/real-cases/sources/` |
 
 Official checks (`checksFor`), each with what that site asks for:
 
@@ -141,13 +152,13 @@ the app shows, with the NPCI return code the bank uses (APB SOP v3.0.2, `sources
 | Account Dormant | PIB 1739603 (2021) | 54 | Your bank account became inoperative |
 | Account Blocked or Frozen | PIB 1739603 (2021) | 68 | The account is blocked for KYC |
 | Inactive Aadhar | PIB 1739603 (2021) | | Your Aadhaar is not seeded to any bank account (the APB SOP lets a bank link a "fresh insert /inactive Aadhaar number" where the customer has given consent) |
-| Amount exceeds limit set on Account by Bank for Credit/Debit per transaction | PIB 1739603 (2021) | 57 | **Not covered** |
+| Amount exceeds limit set on Account by Bank for Credit/Debit per transaction | PIB 1739603 (2021) | 57 | Your bank account has a credit limit |
 | Invalid IFSC | PIB 1739603 (2021) | | Not shown: Aadhaar based payment is mandatory for PM-KISAN (PIB 2112399), routed by the mapper, not by IFSC |
 | Account Holder Expired | PIB 1739603 (2021) | | Not shown: not for the beneficiary to fix |
 | Network failure | PIB 1739603 (2021) | | Not shown: failed transactions are reprocessed by the government (PIB 2152566) |
 
-Result: all 3 major reasons named in 2025, and 5 of the 6 reasons in the 2021 list that a
-beneficiary can fix at a bank, are diagnosed with the code the bank uses; code 57 is the one gap.
+Result: all 3 major reasons named in 2025, and all 6 reasons in the 2021 list that a beneficiary can
+fix at a bank, are diagnosed with the code the bank uses (code 57 was the one gap until `bank_limit`).
 The test fails if a cause, its code or its place among the reasons is removed (seen with 2 mutants:
 code 54 dropped from `inoperative`, `kyc_frozen` dropped from the failed-payment list). This checks
 coverage of the official reasons, not use in the field: no public count of failures per reason was
@@ -160,10 +171,12 @@ found.
 not linked, Aadhaar seeded to another account, e-KYC or land not done, a wrong account number, accounts changed
 by officials, a name or Aadhaar number mismatch, a bank credit limit. `tests/real-cases.test.mjs` checks each
 quote word for word against the saved decision and replays the person's answers through `likelyCauses`. The
-cause the decision names is one the app has in 7 of 12; for the 4 where the decision says what the person saw,
-the app lists it in 3. The gaps (wrong Aadhaar number on the scheme record, name and bank details mismatch, credit
-limit) and every other difference are written down in `evidence/real-cases/README.md`. This is a replay of real
-cases, not use in the field.
+first replay found the cause the decision names was one the app had in 7 of 12, with 3 gaps (a wrong Aadhaar
+number on the scheme record, a name and bank details mismatch, a credit limit). Each gap is now a reason with an
+official source and its own letter, so the cause is one the app has in 10 of 12 (the other 2 decisions name no
+cause); for the 7 where the decision says what the person saw, the app lists it in 6. Every result also warns
+that arrears can be cut to 6 months or 1 year, citing the two decisions that did it. Every remaining difference
+is written down in `evidence/real-cases/README.md`. This is a replay of real cases, not use in the field.
 
 ## Privacy and usage numbers
 
@@ -177,13 +190,14 @@ or phone numbers, no IP. `?nostats` sends nothing.
 
 ## Tests
 
-`npm test` (81 tests; the first 27 written before the code they test):
+`npm test` (87 tests; the first 27 written before the code they test):
 
-- every scheme x symptom x last-received x changes (x PM-KISAN answers) gives 1 to 5 known causes,
+- every scheme x symptom x last-received x changes (x PM-KISAN answers) gives 1 to 6 known causes,
   no duplicates; every cause has at least one official `https` check for every scheme and a fix
   with a known place and source;
 - one test per hard rule (another account, closed account, two years, KYC, PM-KISAN e-KYC and land,
-  MGNREGA and "paid but not received", never came with no other signal);
+  MGNREGA and "paid but not received", never came with no other signal, a wrong Aadhaar number or name
+  on the record, the credit limit on a rejected payment);
 - the inoperative fix keeps "DBT counts", "DBT / scholarship accounts exempt", "any branch",
   "no charge" and "three working days";
 - `requestText` never contains "will get", "will be paid", "guaranteed", "मिल जाएगा", "गारंटी" or

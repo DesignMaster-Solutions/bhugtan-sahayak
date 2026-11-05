@@ -1,4 +1,4 @@
-import { likelyCauses, checksFor, fixFor, requestText, SCHEMES, SYMPTOMS, LAST, CHANGES } from './rules.js';
+import { likelyCauses, checksFor, fixFor, requestText, ARREARS, SCHEMES, SYMPTOMS, LAST, CHANGES } from './rules.js';
 import { STRINGS } from './i18n.js';
 
 const $ = (id) => document.getElementById(id);
@@ -16,7 +16,7 @@ const ICON = {
   pmkisan: '🌾', pension: '👵', mgnrega: '⛏️', scholarship: '🎓', other: '🏦',
   never_came: '🚫', stopped: '⏸️', other_account: '🔀', paid_not_received: '📒', rejected: '❌',
   never: '🚫', under1y: '📅', '1to2y': '📆', over2y: '⌛',
-  new_account: '🆕', closed_account: '🔒', kyc_pending: '📄', none: '➖',
+  new_account: '🆕', closed_account: '🔒', kyc_pending: '📄', aadhaar_wrong: '🔢', name_differs: '🔤', none: '➖',
   yes: '✅', no: '❌', unsure: '❓',
 };
 const YNU = ['yes', 'no', 'unsure'];
@@ -174,6 +174,8 @@ function causeCard(cause, i) {
 }
 
 function renderResult() {
+  $('arrears').replaceChildren(el('b', { textContent: t(ARREARS.note) }), ` ${t('source_label')}: `,
+    ARREARS.source.flatMap((s, j) => [j ? ' · ' : '', el('a', { href: s.url, target: '_blank', rel: 'noopener', textContent: s.name })]));
   $('causes').replaceChildren(...causes.map(causeCard));
   $('worked-btns').hidden = worked;
   $('worked-thanks').hidden = !worked;
