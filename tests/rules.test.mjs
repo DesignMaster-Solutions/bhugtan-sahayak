@@ -76,8 +76,8 @@ test('rule: a closed account puts account_closed and deseeded in the top 3', () 
   const stronger = ['credited_elsewhere', 'mapper_other_bank', 'pmkisan_ekyc', 'kyc_frozen'];
   for (const i of ALL) if (i.changes.includes('closed_account')) {
     const r = at(i);
-    within(r, 'account_closed', 3, stronger, i);
-    within(r, 'deseeded', 3, stronger, i);
+    within(r, 'account_closed', 3, [...stronger, 'deseeded'], i);
+    within(r, 'deseeded', 3, [...stronger, 'account_closed'], i);
   }
   const r = at({ ...base, changes: ['closed_account'] });
   assert.deepEqual(r.slice(0, 2).sort(), ['account_closed', 'deseeded']);
@@ -131,8 +131,9 @@ test('rule: never came with no other signal leads with "Aadhaar not mapped"', ()
 test('inoperative fix says DBT counts, scholarship/DBT accounts exempt, KYC at any branch, no charge, three working days', () => {
   const f = fixFor('inoperative');
   assert.equal(f.fix, 'fix_inoperative');
-  assert.ok(CAUSES.inoperative.points.includes('dbt_counts'));
-  assert.ok(CAUSES.inoperative.points.includes('dbt_accounts_exempt'));
+  for (const p of ['dbt_counts', 'dbt_accounts_exempt', 'any_branch', 'no_charge', 'three_days']) {
+    assert.ok(f.points.includes(p), `inoperative fix lost "${p}"`);
+  }
   assert.ok(f.where.includes('bank_branch'));
   assert.ok(f.source.some((s) => s.url.includes('rbi.org.in')));
 });
