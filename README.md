@@ -14,7 +14,9 @@ Read aloud, Copy and Send on WhatsApp.
 It **never asks for an Aadhaar, bank account or phone number, or a name**, and has no free-text
 field at all. It never promises that money will come.
 
-Built for *Code for a Billion 2026*, track **Financial Inclusion**.
+Built for *Code for a Billion 2026*, track **Financial Inclusion** ([submission #54](https://github.com/karlmehta/code-for-a-billion/issues/54)).
+
+Live app: <https://bhugtan-sahayak.designmaster.workers.dev> · usage numbers: [/stats](https://bhugtan-sahayak.designmaster.workers.dev/stats) · demo video (74 s): [video/demo.mp4](video/demo.mp4)
 
 - Static web app: `index.html`, `app.js`, `rules.js`, `i18n.js`, `styles.css`, `stats.html`. No
   framework, no dependency, no paid API, no cookies, no account. About 67 KB shipped in total, so
