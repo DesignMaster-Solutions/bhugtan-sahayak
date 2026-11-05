@@ -124,6 +124,35 @@ ABPS rejections. The only helpline-like line shown is "Never share your OTP with
   (PIB 1739603, 27/07/2021, <https://www.pib.gov.in/PressReleasePage.aspx?PRID=1739603>, item 6).
 - MGNREGA: **13.55 crore active workers**, paid through ABPS since 1 January 2024 (PIB 2112199, item 8).
 
+## Official failure reasons, replayed
+
+`tests/official-reasons.test.mjs` takes every reason the Union Government has published for a
+failed PM-KISAN payment and runs it through `rules.js`: for a farmer whose status page shows a
+failed payment (e-KYC and land seeding already done), the matching cause must be among the reasons
+the app shows, with the NPCI return code the bank uses (APB SOP v3.0.2, `sources/`).
+
+| Official reason | Source | APB code | What the app shows |
+|---|---|---|---|
+| De-seeding of Aadhaar from the NPCI mapper by the bank | PIB 2152566 (2025) | | The bank removed your Aadhaar seeding |
+| Non-mapping of Aadhaar to account number | PIB 2152566 (2025) | 64 | Your Aadhaar is not seeded to any bank account |
+| Account closure | PIB 2152566 (2025) | 01 | The account that gets the payment is closed |
+| Account closed/Transferred | PIB 1739603 (2021) | 01 | The account that gets the payment is closed |
+| Account Inactive | PIB 1739603 (2021) | 53 | Your bank account became inoperative |
+| Account Dormant | PIB 1739603 (2021) | 54 | Your bank account became inoperative |
+| Account Blocked or Frozen | PIB 1739603 (2021) | 68 | The account is blocked for KYC |
+| Inactive Aadhar | PIB 1739603 (2021) | | Your Aadhaar is not seeded to any bank account (the APB SOP lets a bank link a "fresh insert /inactive Aadhaar number" where the customer has given consent) |
+| Amount exceeds limit set on Account by Bank for Credit/Debit per transaction | PIB 1739603 (2021) | 57 | **Not covered** |
+| Invalid IFSC | PIB 1739603 (2021) | | Not shown: Aadhaar based payment is mandatory for PM-KISAN (PIB 2112399), routed by the mapper, not by IFSC |
+| Account Holder Expired | PIB 1739603 (2021) | | Not shown: not for the beneficiary to fix |
+| Network failure | PIB 1739603 (2021) | | Not shown: failed transactions are reprocessed by the government (PIB 2152566) |
+
+Result: all 3 major reasons named in 2025, and 5 of the 6 reasons in the 2021 list that a
+beneficiary can fix at a bank, are diagnosed with the code the bank uses; code 57 is the one gap.
+The test fails if a cause, its code or its place among the reasons is removed (seen with 2 mutants:
+code 54 dropped from `inoperative`, `kyc_frozen` dropped from the failed-payment list). This checks
+coverage of the official reasons, not use in the field: no public count of failures per reason was
+found.
+
 ## Privacy and usage numbers
 
 Live and public at `/stats` (JSON at `/api/stats`). The app sends, with `navigator.sendBeacon`,
@@ -136,7 +165,7 @@ or phone numbers, no IP. `?nostats` sends nothing.
 
 ## Tests
 
-`npm test` (27 tests, written before the code they test):
+`npm test` (30 tests; the first 27 written before the code they test):
 
 - every scheme x symptom x last-received x changes (x PM-KISAN answers) gives 1 to 5 known causes,
   no duplicates; every cause has at least one official `https` check for every scheme and a fix
@@ -149,6 +178,8 @@ or phone numbers, no IP. `?nostats` sends nothing.
   a rupee amount in either language and keeps its blanks; the reactivation letter cites the RBI
   circular of 1 January 2024 and "no charge"; no output of any `rules.js` function contains a
   12-digit number;
+- every official PM-KISAN failure reason (PIB 2152566, PIB 1739603) maps to the cause and APB code in
+  "Official failure reasons, replayed", and the uncovered ones stay listed as uncovered;
 - `en` and `hi` have exactly the same keys and no empty string;
 - `styles.css` keeps `[hidden]` elements hidden (added after the walk-through on a real browser found "Next" showing on single-choice steps, where it skipped a question unanswered);
 - the Worker counts valid events and rejects bad ones (405 wrong method, 400 bad event / language /
