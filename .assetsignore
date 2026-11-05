@@ -15,3 +15,4 @@ wrangler.toml
 worker.js
 LICENSE
 *.bak
+video

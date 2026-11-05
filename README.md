@@ -134,7 +134,7 @@ or phone numbers, no IP. `?nostats` sends nothing.
 
 ## Tests
 
-`npm test` (26 tests, written before the code they test):
+`npm test` (27 tests, written before the code they test):
 
 - every scheme x symptom x last-received x changes (x PM-KISAN answers) gives 1 to 5 known causes,
   no duplicates; every cause has at least one official `https` check for every scheme and a fix
@@ -148,6 +148,7 @@ or phone numbers, no IP. `?nostats` sends nothing.
   circular of 1 January 2024 and "no charge"; no output of any `rules.js` function contains a
   12-digit number;
 - `en` and `hi` have exactly the same keys and no empty string;
+- `styles.css` keeps `[hidden]` elements hidden (added after the walk-through on a real browser found "Next" showing on single-choice steps, where it skipped a question unanswered);
 - the Worker counts valid events and rejects bad ones (405 wrong method, 400 bad event / language /
   cause / JSON, 404 unknown `/api` path); the real counter lines of `app.js` send nothing with `?nostats`.
 

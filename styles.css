@@ -24,6 +24,7 @@ h2 { font-size: 1.3rem; line-height: 1.35; margin: .75rem 0 1rem; }
 h3 { font-size: 1.15rem; line-height: 1.35; margin: .2rem 0 .5rem; }
 h4 { font-size: 1rem; margin: 1rem 0 .3rem; color: var(--green); }
 h1:focus, h2:focus { outline: none; }
+[hidden] { display: none !important; }
 button, .btn {
   font: inherit; cursor: pointer; border: 1.5px solid var(--green); background: #fff; color: var(--green);
   border-radius: 10px; padding: .7rem 1.1rem; min-height: 3rem; white-space: nowrap; text-decoration: none;
