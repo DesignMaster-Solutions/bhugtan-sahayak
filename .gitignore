@@ -1,3 +1,4 @@
 .af-*
 node_modules
 .wrangler
+.codenow
