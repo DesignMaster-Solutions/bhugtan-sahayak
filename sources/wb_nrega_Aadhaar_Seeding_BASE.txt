@@ -1,0 +1,55 @@
+Process flow for “Bharat Aadhaar Seeding Enabler (BASE) ”
+
+                                           Open NPCI Portal                                  Click on
+                                      https://www.npci.org.in                              Consumer tab
+
+
+     Enter the Details
+     Such as Aadhaar,                 Request for Aadhaar Seeding
+        Bank Ac.
+
+                                        Check Your Service Status                        Click on ‘Bharat
+                                                                                        Aadhaar Seeding
+                                                                                        Enabler (BASE)’
+                                       Get Aadhaar Mapped Status                                tab
+
+
+                                     Get Aadhaar Mapping History
+
+*After clicking on Bharat Aadhaar Seeding enable tab, a screen of ‘Request for Aadhar Seeding” will be appeared automatically
+to enter basic details such as Aadhaar no., Bank account details etc.
+ Steps to follow for “Request for Aadhaar Seeding”
+ Click on https://www.npci.org.in for
+  NPCI website
+
+ Click Consumer button
+
+ Press “Bharat Aadhaar Seeding
+  Enabler (BASE) ” button
+
+Hindi version
+
+ एनपीसीआई साइट पर जाएं और “उपभोक्ता” टै ब पर
+  क्लिक करें
+
+ फिर “भारत आधार सीफ ं ग इनेबलर (बेस)” पर क्लिक
+  करें ,
+ Steps to follow for “Request for Aadhaar Seeding”
+ “Request for Aadhaar Seeding” window will
+  be appeared with 4 options
+
+   Request for Aadhaar Seeding
+   Check Your Service Status
+   Get Aadhaar Mapped Status
+   Get Aadhaar Mapping History
+    Enter details like Aadhaar no., Bank
+     account details etc
+Hindi version
+
+ आधार सीफ ं ग के फलए अनुरोध'' फ ं ो 4 फ कल्ों के
+  साथ फिखाई िे गी
+   • आधार सीफ ं ग के फलए अनुरोध
+   • अपनी से ा की क्लिफत जां चें
+   • आधार मैप की गई क्लिफत प्राप्त करें
+   • आधार मैफपंग इफतहास प्राप्त करें
+

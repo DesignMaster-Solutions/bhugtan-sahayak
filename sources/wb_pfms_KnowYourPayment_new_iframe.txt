@@ -1,0 +1,1 @@
+ Payment by Account Number Bank: Please Enter a bank Note:Enter First Few Characters Of Bank Name Enter Account Number: Please enter valid account number Enter Confirm Account Number : Required! Word Verification: Enter the letters as they are shown in the image above (Letters are not case-sensitive). Invalid 

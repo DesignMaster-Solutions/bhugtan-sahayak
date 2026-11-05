@@ -1,0 +1,1316 @@
+Aadhaar Payments Bridge
+         (APB)
+        System
+  Standard Operating
+      Procedure
+Abstract
+
+Standard Operating Procedures to be followed for linking the Aadhaar number bank account and
+seeding in NPCI mapper for DBT and DBTL transaction processing on NACH platform using
+Aadhaar Payments Bridge System.
+Revision Trail
+
+Date         Revision Description   Version      Author         Reviewed by    Approved by
+
+18/02/2015        First Version      1.0      Sakthi Krishnan   R Vijayakumar Giridhar G M
+                                                                 Sanjoy
+09/05/2018      Updated Version      2.0      Sakthi Krishnan    Kumar        Giridhar G M
+                                                                Mukherjee
+                                                                 Sanjoy
+22/07/2020      Updated Version      3.0        Prabhu R         Kumar        Giridhar G M
+                                                                Mukherjee
+                                                                 Sanjoy
+14/08/2020      Updated Version     3.0.1       Prabhu R         Kumar        Giridhar G M
+                                                                Mukherjee
+
+17/02/2021      Updated Version     3.0.2     V Seethalakhmi     Prabhu R     Giridhar G M
+
+
+
+
+                                                                                         3
+                                                          Table of Contents
+1.    Background ........................................................................................................................................5
+2.    Written consent of the customer: ........................................................................................................8
+3.    Facility to check the Aadhaar seeding status ......................................................................................8
+4.    De-seeding .........................................................................................................................................9
+5.    Overdraft flag ...................................................................................................................................10
+6.    Reconciliation between Aadhaar numbers in CBS with NPCI Mapper ..............................................11
+7.    Mapper Design .................................................................................................................................12
+8.    Moved out data.................................................................................................................................12
+9.    Reseeding ........................................................................................................................................12
+10.      Processing the transactions as a sponsor bank ............................................................................12
+11.      Processing the transactions as a destination bank ........................................................................14
+12.      DMS .............................................................................................................................................16
+13.      Return analysis and corrective action ...........................................................................................16
+14.      Grievance Management System (GMS) ........................................................................................18
+Annexure I – Format for updating Aadhaar number with bank .................................................................19
+Annexure II – Aadhaar Consent Form .....................................................................................................21
+Annexure III – Mapper file format ............................................................................................................22
+Annexure IV – Mapper Reject Codes ......................................................................................................25
+Annexure V – Root Cause of Issues and Solutions .................................................................................26
+Annexure VI – APB File format Input .......................................................................................................27
+Annexure-VII Aadhaar look up – reason code and description ................................................................31
+
+
+
+
+                                                                                                                                             4
+     1. Background
+
+     Aadhaar Payments Bridge System facilitates end-to-end processing of bulk electronic
+     payment instructions primarily facilitating the government departments to disburse the
+     Direct Benefit Transfers (DBT) using Aadhaar number as the financial address of the
+     beneficiaries. The subsidy/benefit can be disbursed to the account of the beneficiary based
+     on the mapping of Aadhaar number to the Institution Identification Number (IIN) of the
+     beneficiary’s bank. The participating banks have to perform a number of activities to
+     complete the mapping and un-mapping of Aadhaar number in NPCI mapper database.
+     This document defines the standard operating procedure to be followed by the member
+     banks for the following activities:
+
+
+            a. Joining the APB system as a participant
+            b. Seeding the Aadhaar number
+            c. De-seeding the Aadhaar number
+            d. Marking/unmarking OD flag
+            e. Reconciliation between Aadhaar numbers registered with the bank and NPCI mapper
+            f.   Processing the transactions as a sponsor bank
+            g. Processing the transactions as a destination bank
+
+
+Seeding of Aadhaar numbers: Seeding means updating the Aadhaar number in NPCI mapper. Seeding
+of Aadhaar numbers involves two steps:
+
+     a) Verification of Aadhaar number and linking the same to the customer’s account in core
+        banking system of the bank.
+     b) Seeding the Aadhaar number in NPCI mapper.
+
+     Banks should take utmost care in linking the Aadhaar number to an account and seeding in
+     NPCI mapper. Once the Aadhaar number is seeded the account will become eligible to
+     receive Direct Benefit Transfers (DBT) credits from the government. Incorrect mapping will
+     lead to wrong credits, the bank will be liable to make good such wrong credits to the
+     originating department/s.
+
+     The following steps should be followed by the bank for seeding an Aadhaar number:
+
+            a. Define a clear process, listing the documents to be submitted by the customer for
+               verification and seeding of Aadhaar number.
+
+            b. Bank should obtain written consent of the customer as per the format provided
+               in Annexure II. Any other document as may be required by the banks depending
+               on their internal policy may also be obtained.
+
+            c. Under no circumstance the Aadhaar seeding should be done without an informed
+               consent of the customer.
+
+
+
+
+                                                                                               5
+d. If the documentary proof submitted is not in line with the internal policy of the
+   bank, then such request for Aadhaar seeding should be rejected with advice to the
+   customer with the deficiencies for necessary action.
+
+e. Banks should verify the Aadhaar credentials of customer by following the extant
+   guidelines prescribed by UIDAI/RBI on the same and updated from time to time.
+   The responsibility of verification and linking of Aadhaar number to an account
+   number and seeding in NPCI mapper without any error solely lies with the bank”.
+
+f. On being satisfied with the documentary proof the bank should first issue an
+   acknowledgement for the seeding request and then proceed to link the Aadhaar
+   number to the customer’s account in their core banking system (CBS).
+
+g. After linking is completed the bank should proceed for seeding the Aadhaar
+   number in NPCI mapper.
+
+h. As a first step of seeding, verification should be done whether the account is
+   eligible to receive the credits pertaining to the direct benefit transfers. If the
+   account is not eligible to receive the DBT related credit then the seeding request
+   should be returned to the customer with appropriate reason. Few examples
+
+       i. NRE account
+       ii. Loan account
+      iii. PPF account
+      iv. Blocked/frozen account
+       v. Inoperative account
+   The list is only indicative. Any account that is not eligible to receive credits
+   should not be seeded with NPCI. Such seeding request should be rejected, with
+   the reason for such rejection.
+i. Bank should have distinct fields in their CBS for updating the Aadhaar number
+   submitted for KYC purpose and Aadhaar for seeding purpose.
+
+j. Based on the purpose for which Aadhaar number is submitted by the customer,
+   the bank official should update the number in the relevant field in core banking
+   system.
+
+k. Under no circumstances the Aadhaar number submitted as a part of KYC be
+   seeded in NPCI mapper. The seeding should only be subject to explicit written
+   consent from customer for receiving the Direct Benefit Transfer related credits.
+
+l. Banks should implement the verhoeff algorithm for checking the correctness of
+   the Aadhaar numbers.
+
+
+
+
+                                                                                   6
+   m. Member banks should implement Aadhaar seeding API for real time seeding
+      (Refer circular no. 009 on “API services” dated July 10, 2019). This will enable
+      the bank to submit the Aadhaar seeding request online and get the confirmation
+      online so that the front office officials can provide the confirmation to the
+      customer immediately.
+
+   n. The downloaded data should be as per the format specified by NPCI for mapper
+      upload (Annexure III). After the seeding file is uploaded, the NPCI mapper will
+      provide a response file indicating whether all the records are updated in the
+      mapper or some records are rejected.
+
+   o. Banks should have monitoring mechanism to verify the response files received
+      from Aadhaar mapper and take corrective action at their end.
+
+   p. Bank should have automated process with a minimum of one time download of
+      all Aadhaar numbers submitted for seeding purpose to be uploaded into NPCI
+      mapper. It is recommended that banks should have process for multiple
+      download and upload into NPCI mapper.
+
+   q. The list of reasons for rejection in Aadhaar mapper is provided in Annexure IV.
+
+   r. There should be a provision in CBS for updating the status of seeding in NPCI
+      mapper. If the Aadhaar number is rejected by the mapper during the seeding
+      process, the reason for the reject should be updated in CBS.
+
+   s. Bank should send a communication to the customer, either through a mail or
+      SMS, on seeding of Aadhaar number with seeding date in case of successful
+      seeding. In case of unsuccessful seeding the communication should be sent
+      along with the reason for rejection. SMS only should be sent wherever customer
+      has registered his mobile number.
+
+   t. The front desk officer/staff should be trained well, to understand that, updating
+      the Aadhaar number in CBS does not mean completion of mapping. Banks
+      should have standard operating procedure to facilitate smooth seeding of
+      Aadhaar numbers. The staff should be given training on all the mapper related
+      matters. The officers/staff should be given a provision to check for seeding status
+      to enable them to answer the customer queries. Banks may use the API
+      services provided by NPCI for checking the Aadhaar seeding status of an
+      Aadhaar number. The officers/staff should be able to communicate to the
+      customer, the reason for rejection as well.
+
+Note
+
+a) If two different banks seed the same Aadhaar number to the account of the customer
+   in their respective banks and NPCI, the bank seeding with the latest mandate date
+   will be mapped in the NPCI mapper and all the subsidies will be routed to that bank
+   only.
+
+
+                                                                                      7
+   b) In case of joint account the bank should have a provision to link the
+      Aadhaar number to respective the customer ID of each of the joint account
+      holders.
+
+      In case of seeding a joint account the bank should inform the applicant, of such
+      seeding, that the benefits received in the account will be available to all the
+      account holders based on the operating instructions of the joint account
+      concerned.
+
+2. Written consent of the customer:
+
+      It is mandatory for the banks to obtain the consent of the customer either through
+      physical form or electronic mode before updating in NPCI mapper. Banks are
+      advised to preserve the consent form received from the customer either in
+      physical or electronic form. In the event of any customer query or complaint, bank
+      must produce the documentary proof of consent given by the customer for
+      Aadhaar seeding.
+
+      Banks should obtain the consent form from customer as per the format given in
+      Annexure II.
+
+      As per new mapper format bank should include previous bank name in the
+      consent form to link customer Aadhaar number to that bank. For fresh insert
+      /inactive Aadhaar number, Bank is allowed to link the Aadhaar number where
+      consent has been given by the customer.
+
+      For E.g. if customer has account in bank A and B currently, customer’s Aadhaar
+      is linked to bank A and now it needs to be changed and linked to Bank B then
+      bank B has to get consent form with the previous bank name in order to link
+      customer Aadhaar to account number.
+
+      To get the banks IIN details, kindly visit www.npci.org.in--> What we
+      do NACH Live bank list.
+
+
+3. Facility to check the Aadhaar seeding status
+
+       Banks should make necessary arrangements to enable the staff as well as the
+       customer to check the Aadhaar mapping status. Either one or all the methods given
+       below can be used to facilitate this
+
+
+          i) The Aadhaar mapper status should be updated in CBS and the staff should
+             be able to view the status.
+
+          ii) The facility may be extended to the customer through internet banking or
+              ATM network or any other alternate channels.
+
+
+
+
+                                                                                           8
+           iii) The API facility provided by NPCI should be implemented to provide
+                online status to the staff.
+           iv) Banks staff having access to NACH system can view the mapping status
+                using MIS tab.
+           v) Aadhaar seeding status enquiry must be made available to the
+                customers through AEPS (Refer circular no 12 dated February 22,
+                2019).
+           vi) Aadhaar look up facility can be availed from NPCI to ascertain mapping
+                status of a batch of Aadhaar numbers (Reason code and description of
+                mapping status is provided in Annexure VII).
+
+4. De-seeding
+
+In the event of an account, where Aadhaar number is seeded in NPCI for receiving the
+benefits becoming ineligible to receive the credits, the bank should take immediate steps to
+de-seed such an Aadhaar numbers from NPCI mapper. The following are the events that
+should trigger deseeding
+       1. Account closed
+       2. Account holder expired
+       3. Customer insolvent/ Account holder became insane
+       4. Account Under Litigation
+       5. Account blocked or frozen
+
+
+Customer consent is not required for de-seeding Aadhaar numbers in the above cases.
+a) Banks should deseed the Aadhaar number once the account becomes ineligible for
+   receiving the credit.
+
+b) In case of an account being frozen or blocked temporarily, the Aadhaar number mapped
+   to the account should be deseeded with a facility to reseed the account in the event of
+   its activation. This process should be automated and there should not be any manual
+   intervention.
+
+c) The bank should have standard operating procedure for deseeding the Aadhaar
+   number on the basis of customer request.
+
+d) Once the deseeding process is executed in core banking, batch processing should be
+   initiated at periodic time intervals to download the deseeding files in the format specified
+   by NPCI
+
+e) Deseeding should be an automated process and carried out at frequent intervals on
+   each day with a minimum of one time at EOD of core banking.
+
+f) There should be a process to monitor the response files received from the mapper to
+   ensure deseeding is completed. If there is any rejection the bank should verify the reason
+   for rejection and take corrective action immediately.
+
+
+
+
+                                                                                            9
+g) The final status of deseeding should be updated in core banking system so that the front
+   desk officer/staff will be able to see the seeding/deseeding status and communicate to
+   the customer.
+
+h) Deseeding communication should be sent to the customer. If the customer has
+   registered his mobile number, then a SMS may be sent to this effect.
+
+            Note:
+
+       a. Deseeding should be an automated process and carried out at frequent
+          intervals on each day with a minimum of one time at EOD of core banking.
+
+       b. Banks should deseed the Aadhaar number once the account becomes
+          ineligible for receiving the credit.
+
+       c. In case of an account being frozen or blocked temporarily, the Aadhaar number
+          mapped to the account should be deseeded with a facility to reseed the account
+          in the event of its activation.
+
+5. Overdraft flag
+
+Under Pradhan Mantri Jan-Dhan Yojana, banks can allow overdraft facility as may be
+decided by the government from time to time. In the event of sanctioning such facility to their
+customers, the banks should ensure that the OD flag is updated in the Aadhaar mapper.
+The below process should be strictly followed while sanctioning OD.
+
+       a. When the customer approaches the bank for OD, the staff should first check
+          the Aadhaar mapping.
+
+       b. OD can be granted only if the Aadhaar number is mapped to that bank
+          account and benefits are transferred to the same account held with that
+          bank.
+
+       c. In case the Aadhaar number is already linked to a different bank and OD flag is
+          ‘Y’ that indicates that another bank has already granted OD to that customer,
+          the request need to be rejected and informed to the customer.
+
+       d. If the Aadhaar is not mapped with the bank, then the customer should be
+          intimated about the same. If the customer prefers to have OD with the current
+          bank, then the bank should first obtain the Aadhaar mapping consent (mandate)
+          from the customer in the prescribed format.
+
+       e. Bank should follow the process detailed in “Aadhaar seeding process’ section
+          of this document.
+
+       f.   After confirming the completion of Aadhaar mapping the bank may proceed to
+            grant OD as per the laid down process and eligibility of the customer.
+
+       g. OD flag will act as an indicator to all the banks for verification and
+          avoiding duplication of OD facility to the same customer.
+
+       h. The bank should not allow utilization of funds in the OD account until the OD
+          flag updation in NPCI mapper is confirmed.
+
+
+
+                                                                                            10
+      i.   After the repayment of OD by the customer, the bank should ensure that the
+           OD flag in NPCI mapper is removed.
+
+      j.   A confirmation to this effect should be given by the bank to the customer. If the
+           customer has registered his/her mobile number, then SMS should be sent to the
+           customer.
+
+
+6. Reconciliation between Aadhaar numbers in CBS with NPCI Mapper
+
+      a. While daily seeding and deseeding of Aadhaar numbers will ensure that the
+         Aadhaar database in CBS of the bank is in sync with NPCI mapper, it is essential
+         for the banks to do periodic reconciliation between these two databases to ensure
+         everything is in order.
+
+      b. The bank should obtain mapper data from NPCI on a periodic basis. It is
+         recommended that the reconciliation is done on monthly basis.
+
+      c. The Aadhaar numbers in NPCI mapper should be compared with the Aadhaar
+         numbers in CBS.
+
+      d. If some Aadhaar numbers are present only in NPCI mapper and not in core
+         banking, then bank should investigate to find out the root cause. Given that banks
+         are expected to link first in CBS and after that seed the same in NPCI mapper
+         and Mapper updation is expected to be an automated process, this scenario
+         should not arise.
+
+           (Note: Practically many banks return the transactions with the reason ‘Aadhaar
+           number not mapped to account number’. This effectively means either the bank
+           has updated the mapper with Aadhaar number without linking it to the account in
+           their core banking or there is an issue in core banking resulting in system not
+           being able to map the Aadhaar number back to account number based on linking
+           at the time of transaction processing).
+
+      e. The bank should identify the issue and take immediate and permanent corrective
+         action. This problem should not recur.
+
+      f.   If some Aadhaar numbers are available in CBS, but not in NPCI mapper, it means
+           that these Aadhaar numbers are not seeded in NPCI mapper or these Aadhaar
+           numbers were rejected during the mapper upload process that was not properly
+           monitored and corrected at that point in time. The bank should verify their core
+           banking and follow the seeding process to seed these Aadhaar numbers again
+           and reconcile with the response files to ensure seeding is completed.
+
+      g. Further to the above reconciliation, banks should have a standard process to
+         download all Aadhaar numbers that are seeded for the accounts that are closed,
+         blocked or frozen, customer deceased or become insane and deseed these
+         Aadhaar numbers once a month so that any residual Aadhaar number that were
+         not de-seeded due to any technical glitch will be de-seeded.
+
+
+
+
+                                                                                         11
+7. Mapper Design
+
+      As per the mapper design, if more than one bank uploads the Aadhaar number
+      in NPCI mapper, the mapper will hold good only the last record updated. For
+      example, Aadhaar number is updated by bank ‘A’ in NPCI mapper on May 05,
+      2017 and bank ‘B’ is updating the same Aadhaar on June 15, 2017, then the
+      latest mapping only will be considered and all the transactions will be routed to
+      bank ‘B’ only.
+
+8. Moved out data
+
+      a. When a bank receives a request from the customer for seeding, they may not be
+         able to identify if the customer has an account with some other bank and seeding
+         has been given to the other bank as well.
+
+      b. If a bank tries to map an Aadhaar number in NPCI mapper and if such Aadhaar
+         number, if already mapped to another bank, subject to the new bank confirming
+         that they have got customer mandate and also provide the previous bank IIN in
+         mapper upload file, the system will either move the Aadhaar mapping to the new
+         bank or reject such request for updation in absence of previous bank IIN.
+
+9. Reseeding
+
+      a. If a customer whose Aadhaar number is deseeded from NPCI mapper approaches
+         the same bank again for seeding his Aadhaar number, the bank should have
+         provision for such reseeding.
+
+      b. The front desk staff/official should be trained to handle reseeding.
+
+           Note: Normally the front desk officials verify their CBS and if the Aadhaar
+           number is linked to the account of the customer they confirm that the
+           Aadhaar is already seeded, this is not correct.
+
+      c. When a request for reseeding is received, the bank should make a provision in
+         the CBS to enable the staff to trigger re-seeding process, even if the Aadhaar
+         number is already available in the CBS.
+
+      d. The process will ensure that the Aadhaar numbers will be downloaded as a
+         part of the data files that are sent to NPCI mapper at periodic intervals for
+         seeding.
+
+      e. The process detailed in the section ‘seeding’ should be scrupulously followed
+         for reseeding as well.
+
+      f.   There should be a field to indicate the first seeding and subsequent reseeding
+           dates.
+
+10. Processing the transactions as a sponsor bank
+
+      a. Banks should prepare or get the files in the format and size prescribed by NPCI
+         from time to time. File format given in Annexure VI
+
+      b. Sponsor bank should ensure that the transactions are uploaded with proper
+         scheme code and state code.
+
+
+                                                                                          12
+c. If proper user code is not available, sponsor banks should approach NPCI to get
+   the corporate created before the files are uploaded to NACH.
+
+d. The bank will be liable for using incorrect user codes resulting in wrong claims
+   lodged by NPCI to the Implementing Agencies. In the event of any wrong
+   payment of DBT charges and incentive due to usage of incorrect user code the
+   Sponsor bank will be liable to make good such losses. NPCI reserves the right
+   to reverse any incorrect credit of DBT incentive and charges (irrespective of the
+   bank making remittance of Service Tax/GST and TDS) upon receipt of instruction
+   from the originating department.
+
+e. Government departments or the sponsor banks should use the Aadhaar look-up
+   facility to check the seeding status of the Aadhaar number to avoid rejections at
+   the time of or before transaction file upload
+
+f.   It is the responsibility of the sponsor bank to ensure that the data received from
+     the department is not tampered with and only correct transaction amount is
+     uploaded into NACH system.
+
+g. The bank should first check whether the funds are available or necessary
+   arrangement with the department is in place for processing the files.
+
+h. Only if funds or the arrangement is available bank should upload the files into
+   NACH system. It is recommended that the bank implement host to host (H2H)
+   functionality to automate the process.
+
+i.   Upload the Aadhaar based transaction file without the IIN number of the
+     destination bank. NACH system has the capability to update the IIN number from
+     the mapper database.
+
+     Note: - in case of wrong IIN being given in the input file, the transaction will get
+     rejected.
+
+j.   Sponsor bank should have maker/checker concept and provide resources
+     accordingly.
+
+k. After the file is authorized by the checker, APB system after processing the file will
+   provide an acknowledgement. This could be positive or negative.
+
+l.   The status of the file uploaded should be checked.
+
+m. There should be monitoring mechanism at the bank to ensure verification of the
+   status of all the files uploaded and downloaded.
+
+n. The system will show the file status as “Accepted” if processed successfully
+   otherwise it will show the file status as “Rejected or Partial”.
+
+o. The file may be rejected fully or partially. Banks should analyze the rejects and
+   take corrective action as may be required.
+
+p. After the presentation session is completed the sponsor bank should reconcile
+   the amount of the presentation files with the settlement received in the account
+   maintained with RBI.
+
+q. In case of any discrepancy in settlement report the bank should first check
+
+
+                                                                                            13
+           whether any rejected files are left out without remediation and re-
+           upload. If further clarification is required the bank officials should get in touch with
+           NPCI for necessary details. This process has to be followed for all the
+           presentation and return sessions.
+
+           No session should be left unreconciled with the settlement.
+
+      r.   After the return session is completed APB system will provide response files to
+           the sponsor bank with status of the transactions at record level. The following are
+           the possible types of status
+
+               i. Successful (flag 1)
+              ii. Returned (flag 0)
+              iii. Extended (flag 3)
+              iv. Rejected (flag 2)
+              v.   Deemed Accepted (flag 7)
+
+      s. Sponsor bank should have the capability to consume the response files and
+         provide a final response file to the department who has originated the
+         transactions.
+
+      t.   In case of returned transactions the consolidated amount should be credited back
+           to the account maintained by the department with the bank as per the agreed
+           process and timeline with the department concerned.
+
+      u. There should be a process to provide a detailed return report in the format
+         required by the department concerned.
+
+      v. In case of extended transaction, sponsor bank should provide interim status to
+         the government department and provide the final response files after the same is
+         received on the next working day.
+
+      w. Banks should develop capability to handle multiple extensions and to consume
+         record level status.
+
+      x. Destination bank at the time of submitting the response files provide the account
+         number and name of the beneficiary for each of the transactions. This should be
+         an automated process.
+
+      y. Sponsor bank should share this information with the Government departments.
+
+      AA. It is mandatory for the destination bank to provide beneficiary name and account
+         number, if the specified data is not provided NACH system will reject such
+         transactions resulting in deemed acceptance. Banks should ensure that no
+         transactions will become deemed accepted.
+
+
+11. Processing the transactions as a destination bank
+
+      a. Destination banks should seed the Aadhaar number only if the bank has been
+         certified by NPCI for participation in APB process.
+
+      b. The destination bank should put in place, automated process for processing
+
+      c. the inward files received through the APB system. The system should be
+         sufficiently scaled up to handle peak volume with a head room for 40% increase
+                                                                                                14
+     in volume.
+
+d. The processing capacity to be reviewed on a periodic basis and measures
+   should be taken to increase the capacity well in advance.
+
+e. On receipt of the inward file, as a first step the bank should verify the amount of
+   inward files against the settlement received.
+
+f.   If there is any discrepancy in the settlement amount, the same should be
+     immediately brought to the notice of NPCI helpdesk. The inward processing
+     should be taken up only after the discrepancy is resolved.
+
+g. If the settlement amount tallies with the inward amount, then the bank should
+   proceed to process the inward files. There should be control points that will allow
+   file processing only after settlement reconciliation is confirmed. Under no
+   circumstances banks should release the credits to the customers without
+   receiving the settlement amount.
+
+h. The bank should make provision in the system to provide the name and the
+   account number against each successful Aadhaar based transaction. This data
+   should be sent as a part of response file.
+
+i.   The destination bank should ensure that all the transactions are processed well
+     in time and response files are submitted before the cut-off time specified by
+     NPCI. This activity should be completed well in advance with a buffer to cater
+     to any eventuality during the processing. Bank should have BCP in place in
+     case of disturbance in one unit of a processing center. Adequate resource
+     should be in place to process transactions on a local holiday.
+
+j.   Banks should have monitoring mechanism to ensure all the files are uploaded
+     and processed in NACH. The acknowledgement files should be consumed by
+     the destination bank to ensure that all the response files are uploaded.
+
+k. Bank should complete the processing of transactions on the same day of
+   receipt. In case of delay in providing return response / credit to customer beyond
+   T+1 working days a penalty by Rs. 100/- will be applicable for per transaction
+   for each day of delay.
+
+     1) In-case of success transaction, the bank must credit the customer account
+        along with the penalty whereas
+     2) In case of return transaction the penalty will be debited by NPCI from
+        destination bank and credited to sponsor bank for onward credit to the
+        department.
+     3) Refer to RBI circular no. RBI/2019-20/67 DPSS.CO.PD No.629/ 02.01.014/
+        2019-20 dated September 20, 2019 and NPCI circular no.
+        NPCI/NACH/2019-20/014 dated October 17, 2019 on harmonization of TAT.
+
+l.   In case any response file is rejected, the bank should check the reject reasons
+     and ensure corrective action and re-upload the files within the session time.
+
+m. After the return session is closed the bank should tally the amount of returned
+   transactions with the settlement amount.
+
+n. In case of any discrepancy in settlement report, the bank should first check
+     whether any rejected files are left out without remediation and re-upload. If
+     further clarification is required, the bank officials should get in touch with
+
+
+     NPCI for necessary details. This process has to be followed for all the
+                                                                                     15
+             presentation and return sessions. No session should be left
+             unreconciled with the settlement.
+
+12. DMS
+
+             Dispute Management System (DMS), dispute is the query / complaint raised by
+             customer/corporate/Govt Dept/bank when the finality of transactions is not
+             accepted.
+
+             Disputes can be raised within 120 working days form the data of transaction
+             processing. Disputes can be raised in online in system. There are two types of
+             flows in DMS i.e. Normal flow and Good Faith Flow.
+
+                 1. Normal flow is the stage where a dispute can be raised within 45 working
+                    days from the data of transaction processing.
+
+                 2. Good faith flow is the stage where the dispute can be raised for the
+                    transactions beyond 45 working days from the date of transactions.
+
+             Refer to section 28 page 64 of NACH procedural guidelines for further details
+             on DMS process.
+
+13. Return analysis and corrective action
+
+       Aadhaar based payments are routed to a bank only on the basis of Aadhaar numbers
+       mapped by the bank in NPCI mapper. As seeding, de-seeding and re-seeding can be
+       controlled by the banks through automated process there should not be any returns
+       in Aadhaar based payments. Banks should have strong workflow controls to ensure
+       nil returns. Additionally banks should take the following measures
+
+      a) Member banks should put a review mechanism in place to analyze the returns on
+         regular basis.
+
+      b) Return reason wise analysis should be carried out, the root cause for such returns
+         should be analyzed and steps should be taken to fix the issue permanently.
+
+      c) The following is the list of returns with codes and description:
+
+                                    APB (Aadhaar Payment
+                                           Bridge)
+Sr. No    Code                             APB CR Return reason
+           s                                    descriptions
+  1        01     Account Closed
+  2        10     Unclaimed/DEAF accounts
+  3        51     KYC Documents Pending
+  4        52     Documents Pending for Account Holder turning Major
+  5        53     Account Inoperative
+  6        54     Account dormant
+                  A/c in Zero Balance/No Transactions have Happened, First Transaction in
+  7        55
+                  Cash or Self Cheque
+  8        56     Small Account, First Transaction to be from Base Branch
+  9        57     Amount Exceeds limit set on Account by Bank for Credit per Transaction
+ 10        58     Account reached maximum Credit limit set on account by Bank
+ 11        60     Account Holder Expired
+                                                                                             16
+                                  APB (Aadhaar Payment
+                                            Bridge)
+Sr. No     Code                             APB CR Return reason
+             s                                   descriptions
+  12        62     Account Under Litigation
+  13        64     Aadhaar Number not Mapped to Account Number
+  14        68     A/c Blocked or Frozen
+  15        69     Customer Insolvent / Insane
+  16        70     Customer to refer to the branch
+  17        71     Invalid Account type (NRE/PPF/CC/Loan/FD)
+
+
+       d) List of few initial rejects which could be avoided with Aadhaar lookup
+
+Sl.      Reason
+                Reason description
+No.       code
+ 1          76  Invalid Aadhaar Format
+                Aadhaar number de-seeding from NPCI mapper by bank - customer to
+  2         95
+                contact his/her bank
+  3         96  Aadhaar mapping does not exist/Aadhaar number not mapped to IIN
+
+     e) The following returns can be avoided with due care.
+S .No Return Reason                                      Actionable
+
+                                                   Bank should have an automated process
+  1                                                to deseed such Aadhaar number from
+         Account Closed
+                                                   NPCI Mapper after account is closed
+
+                                                   Banks are seeding NPCI Mapper without
+                                                   linking the Aadhaar in CBS or have wrong
+                                                   return reason mapping in CBS. Banks
+                                                   should reconcile the Aadhaar dump as per
+  2      Aadhaar Number not mapped to              CBS and Aadhaar mapper dump and
+         Account number                            seed/deseed the Aadhaar Number
+
+                                                   Bank should analyse other reasons as well
+                                                   to ensure that the transactions are not
+                                                   returned for this reason.
+
+  3      Invalid Account                           Aadhaar number should not be seeded
+         (NRE/PPF/CC/Loan/FD)                      with this type of Account
+
+                                                   Bank should have an automated process
+  4      Account Holder Expired                    to deseed such Aadhaar numbers from
+                                                   Mapper
+
+
+       Returns with certain reasons:
+
+       Banks are advised to review their internal policy while returning transactions with
+       following reasons in view of the RBI guidelines/clarifications stated hereunder
+
+
+
+
+                                                                                             17
+Code     Descriptions               RBI circular              Guidelines
+                                                              Banks are advised to ensure that accounts of
+                                                              all student beneficiaries under the various
+                                                              central,    state   government      scholarship
+            Documents                 RBI/2014 -              schemes are free from restrictions of minimum
+                                                              balance and total credit limit have separate
+            pending for       15/226.RPCD.RRB.RCB.BC.
+  52                                                          product code in CBS to accounts open by the
+          Account Holder        No.32/03.05.33/2014-15        beneficiaries under the various central & /State
+           turning major       dated September 10,2014        government schemes Including scholarship
+                                                              schemes for students so that the stipulation of
+                                                              inoperative/dormant account due to non-
+                                                              operation does not apply.
+                                                              Appropriate steps to be taken including
+                                                              allotment of a different ' product code' in their
+                                                              CBS to all such account so that stipulation of
+                                                              inoperative accounts/dormant account due to
+         Account                                              non-operation for over a period of 2 years DBT,
+  53                                  RBI/2013 -              EBT, Scholarships, Zero balance account etc.
+         Inoperative
+                             14/262.DBOD.No.Leg.BC.53/        under central and state Government benefit
+                             09.07.005/2013-14 dated Sep      scheme. In order to reduce risk of fraud etc., in
+                                       17,2013                such accounts while allowing operations in
+                                                              these accounts, due diligence should be
+                                                              exercised by ensuring the genuineness of
+                                                              transaction verification of signature, identity
+ 54      Dormant account                                      etc. New return code 10 introduced to handle
+                                                              Unclaimed/DEAF account
+         Amount Exceeds                                       1. As per Amendment to Prevention of Money
+           limit set on                                       Laundering (maintenance of records) Rules,
+ 57      Account by Bank                                      2005 relating to small accounts, Notification
+          for Credit per                                      no. G.S.R 1038 dated 21.8.2017 issued by the
+                                                              Department of Revenue, Ministry of Finance,
+           Transaction
+                                                              the limit on balances shall not be considered
+                                                              while making deposit through government
+                                                              grants, welfare benefits and payment against
+                                        RBI/2014 -            procurements Letter No.F.NO1/21/2014-FI(C-
+         Account reached      15/226.RPCD.RRB.RCB.BC.No.      69551) dated 1.6.2018 issued by this
+         maximum Credit         32/03.05.33/2014-15 dated     department in this regard.
+ 58                                 September 10,2014
+           limit set on
+                                                              2. All KYC updated PMJDY accounts are to be
+         account by Bank
+                                                              converted to regular BSBD accounts, instead
+                                                              of treating them as "small accounts" .In this
+                                                              regard earlier communication of this
+                                                              department vide
+       Some of the frequently faced issues in mapper file upload and transaction file
+       upload, their root causes and the solutions are given in Annexure V
+
+      14. Grievance Management System (GMS)
+
+        GMS system is a part of the DMS module of NACH. GMS is used to raise any non-
+        financial queries between banks and OMCs. As such the system has been extended only
+        to DBTL transactions. But, the system is capable of handling the same for other
+        transactions as well. All the banks which are live in DMS, will be live on GMS as well.
+
+        GMS helps the banks and OMCs to handle the non-financial queries/grievances of their
+        customers, which are raised to them. GMS is an in-built system in NACH application, which
+        can be used by the member banks of ACH, OMCs and any other designated entity (ex:
+        UIDAI). Grievances can be raised by bank to any other bank, bank to OMC, OMC to bank,
+        and bank to UIDAI etc.
+
+
+                                                                                                    18
+Annexure I – Format for updating Aadhaar number with bank
+
+
+
+
+                                                            2
+                                                            0
+   Annexure II – Aadhaar Consent Form
+
+   The Branch
+   Manager Bank
+   …………………
+   Branch……………………….
+   ………………………………..                           …………………………………..
+
+                Date:
+   Dear Sir/Madam,
+  Bank Account No .................................................................... in my name Linking of Aadhaar / UID
+  Number with the account
+  I am maintaining a Bank Account number ................................. with your Branch (Branch
+  name… ............................. ). I submit my Aadhaar number and voluntarily give my
+  consent to;
+  o Seed my Aadhaar/UID number issued by the UIDAI, Government of India in my name with
+       my aforesaid account.
+  o Map it at NPCI to enable me to receive Direct Benefit Transfer (DBT) from Government of
+       India in my above account. I understand that if more than one Benefit transfer is due to me
+        , I will receive all Benefit Transfers in this account
+o Use my Aadhaar details to authenticate me from UIDAI
+  o Use my mobile number mentioned below for sending SMS alerts to me
+  The particulars of the Aadhaar/ UID letter are as under:
+  Aadhaar/ UID number: ………………………………………………..
+  Name of the Aadhaar Holder as in Aadhaar card: ………………………………………
+  I have been given to understand that my information submitted to the bank herewith shall not
+  be used for any purpose other than mentioned above, or as per requirements of law. Yours
+  faithfully,
+
+
+   (Signature/ Thumb impression of the account holder)
+   Name: ………………………………….
+   Mobile No. …………………………
+   Email: ………………………………….
+   Enclosure: copy of the Aadhaar letter self-attested,
+   ……………………………………………………………………………………………………………...
+   ........
+   Confirmation of insertion / linking of Aadhaar number with Bank Account:
+
+   The Account number ………………………………… of Shri / smt ………………………….. with ------------
+   ---
+   ----(Bank) Branch
+   ……………………… has been linked with Aadhaar/UID number ………………………………….
+   And mobile number
+
+
+   Date …………….                                                    (Bank’s authorized official)
+
+
+
+
+                                                                                                              21
+Annexure III – Mapper file format
+
+
+                                    Mapper File Format
+                                          Header
+  S.     Field       Max     Field Type   Status    Field Description        Remarks
+  No     Name       Length
+                                          Header
+  1    Header           2 NUM             M        Header identifier      31 – Constant
+       Identifier                                  for the mapper file    value
+  2    Uploading        9 NUM             M        6 digit IIN of the     000555555
+       Bank IIN                                    bank uploading the
+                                                   file and left padded
+                                                   with zeroes
+  3    User            30 ALP / NUM       M        Name of the person     Example -
+       Nam                                         who has prepared       Srinivas
+       e                                           the file and right     Rao
+                                                   padded with spaces
+  4    Date of          8 DATE            M        Date of preparation    26122011
+       Input                                       of the file in
+                                                   DDMMYYYY format
+  5    Input file       5 NUM             M        File number            00003
+       number                                      generated by
+                                                   originating bank for
+                                                   control purpose to
+                                                   captured file. The
+                                                   field would be left
+                                                   padded with
+                                                   zeroes.
+  6    Total            5 NUM             M        Total number of        00002
+       number of                                   records to be
+       records                                     captured by
+                                                   originating bank,
+                                                   left padded with
+                                                   zeroes.
+  8    Filler         301 ALPH / NUM O             Filler                 Spaces
+       Total          360
+
+
+
+
+                                                                                          22
+                              Detail Record
+S.    Field    Max   Field Type   Status    Field Description          Remarks
+No   Name     Length
+1 Detail           2 NUM          M        The detail record       34 –
+   record                                  identifier              Constant
+   identifier                                                      value
+2 Record          15 ALP / NUM    M        Unique Number to
+   Reference                               identify the record
+   Number                                  to be given by bank
+3    Aadhaa      15 NUM           M        Aadhaar number of       00072345678901
+     r                                     the beneficiary, left   2
+     Number                                padded with zeroes
+4    Mappe        9 NUM           M        6 digit IIN of the      000560112
+     d IIN                                 bank which holds
+                                           the account for the
+                                           beneficiary, left
+                                           padded with zeroes
+5    Mandate      1 ALP           M        The Mandate flag        Y
+     Flag                                  can only be 'Y' or 'N'.
+6    Date of      8 DATE          M/O      This field would be     DDMMYYYY
+     customer                              updated by the
+     mandate                               participant bank
+                                           user based on date
+                                           mentioned in the
+                                           mandate provided
+                                           by customer if the
+                                           Mandate Flag is 'Y'
+7    Mapping      1 ALP / NUM     O        Determines status of
+     Status                                existing UID & IIN
+                                           mapping in mapper
+                                           system i.e. active or
+                                           inactive.
+                                           Value will be one
+                                           space in case of
+                                           new mapping
+                                           creation or updation
+                                           to existing mapping.
+                                           Value will be “I” if
+                                           existing UID & IIN
+                                           mapping is to be
+                                           deactivated. If
+                                           Mapping Status is
+                                           not provided then it
+                                           is considered as
+                                           space.
+8    OD Flag      1 ALP           M        The OD flag can
+                                           only be 'Y' or 'N'.
+9    OD Date      8 DATE          M/O      OD Date is              DDMMYYYY
+                                           mandatory when
+                                           the OD Flag is “Y”
+
+10   Previous     9 ALP / NUM     O        Reserved field          Prefixed with
+     IIN                                                           "000"
+
+                                                                                   23
+                              Detail Record
+S.    Field    Max   Field Type   Status    Field Description       Remarks
+No   Name     Length
+11 Reserve       291 ALP/NUM      O        Reserved field       To be filled with
+   d field                                                      spaces. Usage
+                                                                will be
+                                                                communicated
+                                                                later.
+    Total       360
+
+
+
+
+                                                                                    24
+Annexure IV – Mapper Reject Codes
+
+    Mapper
+                                                  Description
+       Status
+       Code
+                    Mandate date in the record must be greater than that of the
+         0
+                    existing UID
+         1          Duplicate UID record
+         2          Future mandate date is not accepted
+         3          Fresh insert must be Active only
+         5          Aadhaar Number is not mapped to your IIN or Scheme
+         7          Inserted For the First Time
+         8          Updated UID record
+         9          Invalid Aadhaar_No, Verhoeff Checksum validation Failed
+         10         Invalid Aadhaar_No, Aadhaar number is not equal to 12 digits
+         11         Invalid Aadhaar_No, Aadhaar number must not start with 1
+         12         Mandate Flag must be Y
+         13         Mapped to Some Other Bank and OD already exists
+         14         OD can be set Y only when mandate flag is Y
+         15         Aadhaar number cannot be inactivated when OD flag Y
+         16         Future OD date is not accepted
+                    OD date in the record must be greater than that of the existing OD
+         17
+                    date
+                    OD date in the record must be greater than or equal to Mandate
+         18
+                    date
+         19         Mandate should not be prior to 2012 January
+         21         Aadhaar number updated as banks merged
+         22         Mandate flag and Mandate date is mandatory for fresh insert
+         23         Mandate flag and Mandate date is mandatory
+
+
+
+
+                                                                                         25
+Annexure V – Root Cause of Issues and Solutions
+
+  S.   Mapper/
+                      Type of Error                           Solution
+  No    TXN
+                                           Customer has already seeded the Aadhaar with
+                  Customer mandate         some other bank with the mandate date later
+   1   Mapper     less than existing       than what has been given by the bank. Give a
+                  UID date                 later date for the Aadhaar number to be seeded
+
+                  Invalid Aadhaar          Aadhaar number given does not match the
+   2   Mapper
+                  number                   verhoeff algorithm.
+
+                                           Use the lookup option to know the status in case
+                                           of bulk. For one or two Aadhaar numbers, banks
+                  Status of Aadhaar        can use the MIS option or API
+   3   Mapper
+                  number not known
+                                           Use the lookup option to know the status in case
+                                           of bulk. For one or two Aadhaar numbers, banks
+                                           can use the MIS option or API
+                                           Destination bank IIN number need not be given
+   4   Txn        Invalid IIN              in the transaction file. If wrong IIN is given,
+                                           transaction will get rejected.
+                  Amount exceeds           Amount given for per transaction in the header
+   5   Txn        individual transaction   is less than the actual transaction value.
+                  amount                   Change the higher cap amount in the header
+
+                  Duplicate reference      Reference number should be unique for a user
+   6   Txn
+                  number                   for a day. This is applicable across files
+
+                  Invalid Aadhaar          Aadhaar number is not available in the NPCI
+   7   Txn
+                  number                   mapper database
+
+                  Participant not          The destination bank to which the transaction
+   8   Txn
+                  mapped                   is to be routed, is not live for the product
+
+
+
+
+                                                                                           26
+   Annexure VI – APB File format Input
+
+                                                   Existing
+ Sr. No              Field Description              length         Field Type   Mandatory/Optional                            Remarks
+(Header) Credit Contra Record
+    1    APBS transaction code                                2    NUM              Mandatory        APBS transaction code 33 for APBS credit.
+                                                              7 ALP NUM             Mandatory        User number allotted by NPCI at the time of Registration ;
+   2     User Number                                                                                 1-7digit Corporate number
+   3     User Name                                            40 ALP / NUM          Mandatory        Name of Government Department / Agency / User
+   4     User Reference                                       14 ALP / NUM          Mandatory        User defined reference number for entire transaction
+   5     APBS Tape Input Number                                9   NUM               Optional        User defined input tape
+   6     Sponsor Bank IIN                                      9   NUM              Mandatory        6 digit Sponsor Bank IIN
+   7     User's Bank Account Number                           15 ALP / NUM           Optional        Account number of user with sponsor bank
+   8     Ledger Folio Number                                   3 ALP / NUM           Optional        Ledger folio particulars
+                                                                                                     User defined limit which would be taken to validate
+                                                                   NUM               Optional
+   9     User Defined limit for individual items              13                                     individual items amount
+   10    Total Items                                           9   NUM              Mandatory        Total items in the file
+   11    Total Amount (Balancing Amount)                      13   NUM              Mandatory        Amount in paise
+   12    Settlement Date (DDMMYYYY)                            8   NUM              Mandatory        Date on which settlement is to be effected
+   13    Reserved (kept blank by user)                        10   NUM               Optional        APBS item sequence number to be allotted by NPCI
+   14    Reserved (kept blank by user)                        10   NUM               Optional        Checksum total generated by NPCI
+   15    Filler                                                3 ALP / NUM           Optional        Spaces
+                          Total                      165
+
+Credit Records
+   1      APBS Transaction Code                               2      NUM            Mandatory        Transaction code 77 for APBS credit.
+
+                                                                                                     6 digit Destination Bank IIN, Left padded with zeroes.This
+                                                                     NUM             Optional
+                                                                                                     field could be left blank by the sponsor bank as the APBS
+   2     Destination Bank IIN                                  9                                     mapper has capability to populate this field.
+   3     Destination Account Type                              2   NUM               Optional        MICR transaction code
+   4     Ledger Folio Number                                   3 ALP / NUM           Optional        Alphanumeric ledger folio particulars
+   6     Beneficiary Aadhaar Number                           15   NUM              Mandatory        Beneficiary's 12 digit Aadhaar Number
+                                                                                                     Beneficiary's account name (to be updated by destination
+                                                                  ALP / NUM          Optional
+   7     Beneficiary Account Holder's Name                    40                                     bank)
+   8     Sponsor Bank IIN                                      9    NUM             Mandatory        6 digit Sponsor Bank IIN
+                                                               7 ALP NUM            Mandatory        User number allotted by NPCI at the time of Registration ;
+   10    User Number                                                                                 1-7 digit Corporate number
+   11    User Name /Narration                                 20 ALP / NUM           Optional        Will be used as Narration data
+                                                                                                     User defined reference number such as ledger folio
+                                                                                                     number, share/debenture certificate number or any other
+                                                                   ALP / NUM        Mandatory
+                                                                                                     unique identification number given by user to individual
+   12    User Credit Reference                                13                                     beneficiaries
+   14    Amount                                               13     NUM            Mandatory        Amount in Paise
+   15    Reserved (APBS Item Seq No.)                         10     NUM             Optional        APBS item sequence number to be allotted by NPCI
+   16    Reserved (Checksum)                                  10     NUM             Optional        Checksum total generated by NPCI
+                                                                                                     Flag for items credited (1) and returned uncredited (0)
+                                                                     NUM             Optional
+   17    Reserved (Flag for success / return)                 1                                      allotted by NPCI
+                                                                                                     Spaces in case null, otherwise return code left padded
+                                                                     NUM             Optional
+   19    Reserved (Return codes)                               2                                     with space (to be updated by destination bank)
+   20    Filler                                                9     NUM             Optional        To be kept blank
+   21    MORD Reference Number                                30   ALP NUM           Optional        Reference Number provided by MORD Department
+   22    Group ID                                             30   ALP NUM           Optional        Group ID provided by MORD Department
+   23    FTO Number                                           50   ALP NUM           Optional        FTO Number provided by MORD Department
+                         Total                       275
+
+
+
+
+                                                                                                                                                2
+                                                                                                                                                6
+ Inward
+                                                                   Field  Mandatory/Opt
+Sr. No                   Field Description      Existing length    Type        ional                                      Remarks
+                                                                        Header Record
+  1         ABPS transaction Code                     2             NUM     Mandatory Code 33
+  2         Control Character                         7           ALP NUM    Optional   Zeros
+  3         Filler                                   87           ALP NUM    Optional   Spaces
+  4         Control Character                         7           ALP NUM Mandatory Six digit Destination Bank IIN left padded with a zero.
+  5         Total number of Items                     9             NUM     Mandatory Total number of records in File.
+  6         Total Amount                             13             NUM     Mandatory Total amount of the file, in paise.
+  7         Settlement Date                           8             NUM     Mandatory Settlement Date in ddmmyyyy format
+  8         Filler                                   44           ALP NUM    Optional   43 spaces and a dot at the end.
+                               Total                 177
+
+                                                                        Credit Records
+          1 APBS Transaction Code                      2            NUM      Mandatory    Code 77
+          2 Destination Bank IIN                       9          ALP NUM Mandatory       Six digit Destination Bank IIN left padded with a zero.
+          3 Destination Account Type                   2            NUM       Optional    MICR transaction code
+          4 Ledger Folio Number                        3          ALP NUM     Optional    Alpha numeric Ledger Folio particulars
+          5 Beneficiary Aadhaar Number                15          ALP NUM Mandatory       Beneficiary's 12 digit Aadhaar number.
+          6 Beneficiary account holder's name         40          ALP NUM     Optional    In case the transaction is successful this could be populated
+          7 Sponsor Bank IIN                           9          ALP NUM Mandatory       Six digit Sponsor Bank IIN left padded with a zero.
+          8 User number                                7          ALP NUM Mandatory       Existing User Number
+                                                                                          If Narration data is present in ISO XML, same will be populated, else this
+          9 User Name /Narration                      20          ALP NUM    Mandatory
+                                                                                          field will contain corporate user name
+                                                                                          User defined Reference Number such as Ledger Folio number, or Share /
+         10 User Credit reference                     13          ALP NUM    Mandatory    Debenture Cert. No. or any other unique identification number given by the
+                                                                                          User for the individual beneficiaries
+         11 Amount                                    13           NUM       Mandatory    Amount in paise
+         12 Reserved (Kept blank by user)             10           NUM       Mandatory    ACH item Sequence Number to be allotted by NPCI
+         13 Reserved (Kept blank by user)             10           NUM       Mandatory    Checksum total generated by NPCI.
+                                                                                          Flag for items credited / debited (1) and returned uncredited / undebited
+         14 Reserved (Kept blank by user)              2           NUM        Optional
+                                                                                          (0)
+                                                                                          This will be blank. Field will be populated by destination bank for
+         15 Destination bank account number           20          ALP NUM     Optional
+                                                                                          successful transactions only.
+         16 Return reason code                        2            NUM        Optional    Spaces in case null, otherwise return code left padded with space.
+                                 Total               177
+
+
+
+
+                                                                                                                                                      28
+ Return
+                                                       Existing     Field Mandatory
+Sr. No                 Field Description                length      Type    /Optional                                    Remarks
+                                                                        Header Record
+  1      ABPS transaction Code                            2         NUM Mandatory Code 33
+  2      Control Character                                7       ALP NUM Optional Should be Zeroes
+  3      Filler                                          87       ALP NUM Optional Spaces
+  4      Control Character                                7       ALP NUM Mandatory Six digit Destination Bank IIN left padded with a zero.
+  5      Total number of Items                            9         NUM Mandatory Total number of records in File, left padded with zeroes.
+  6      Total Amount                                    13         NUM Mandatory Total amount in the file, in paise.
+  7      Settlement Date                                  8         NUM Mandatory Settlement Date in ddmmyyyy format
+  8      Filler                                          44       ALP NUM Optional 43 spaces ending with a dot (.)
+                             Total                       177
+
+                                                                       Credit Records
+  1      APBS transaction code                            2         NUM Mandatory Code 77 for accepted and 88 for rejected (Reject code is updated by NPCI)
+  2      Destination Sort Code                            9       ALP NUM Mandatory Six digit Destination Bank IIN left padded with zeroes.
+  3      Destination account type                         2         NUM      Optional Account type
+  4      Ledger folio number                              3       ALP NUM Optional Alpha numeric Ledger Folio particulars
+  5      Beneficiary Aadhaar Number                      15       ALP NUM Mandatory Beneficiary's 12 digit Aadhaar Number
+  6      Beneficiary Name                                40       ALP NUM Mandatory Name of Beneficiary could be populated in case of success.
+  7      Sponsor Bank-Branch Sort code/IFSC/IIN/MICR      9         NUM Mandatory Six digit Sponsor Bank IIN left padded with zeroes.
+  8      User number                                      7       ALP NUM Mandatory Existing User Number
+  9      User name/ Narration                            20       ALP NUM Optional Name og Govt Deptt / Agency; Will be used as Narration data
+                                                                                      User defined Reference Number such as Ledger Folio number, or Share /
+                                                                                      Debenture Cert. No. or any other unique identification number given by the
+ 10      User Credit Reference (transaction Ref no)      13       ALP NUM Mandatory User for the individual beneficiaries
+ 11      Amount                                          13         NUM Mandatory Amount in paise
+ 12      Reserved                                        10         NUM Mandatory APBS Sequence Number to be allotted by NPCI
+ 13      Reserved                                        10         NUM Mandatory Checksum total generated by NPCI
+ 14      Reserved                                         2         NUM    Optional Flag for items credited / debited (1) and returned uncredited / undebited (0)
+ 15      Destination Bank Account Number                 20       ALP NUM Mandatory In case the transaction is successful this could be populated
+ 16      Return Reason Code                               2         NUM Mandatory Reason for not crediting in case of return- Bank to Update
+                                                                                    Customer credit date to be provided to identify the actual credit date of
+ 17      Processed date                                   8         NUM    Optional
+                                                                                    customer in the format DDMMYYYY
+                             Total                       185
+
+
+
+
+                                                                                                                                                  29
+Response
+  Sr. No                 Field Description             Existing length    Field Type
+                                                                                   Mandatory/Optional                    Remarks
+Header Record
+     1     APBS transaction Code                             2           NUM        Mandatory     APBS - Credit transaction code 33
+     2     User Number                                       7           ALPH / NUM Mandatory     Existing User Number
+     3     User name                                         40          ALP        Mandatory     Name of the Government Department / Agency
+     4     User Credit Reference                             14          ALP / NUM Mandatory      User defined reference number for the entire
+                                                                                                  transaction (Alpha Numeric).
+     5      APBS tape input                                  9           NUM         Optional     User defined input tape
+     6      Sponsor Bank IIN                                 9           NUM         Mandatory    BIN / IIN allocated by NPCI. This is 6 digits. hence to
+                                                                                                  be left padded with three zeros
+     7      User’s bank Account number                       15          ALP / NUM   Optional     Account number of the User to be debited by
+                                                                                                  Sponsor Bank. (Alpha numeric)
+     8      Ledger Folio number                              3           ALP / NUM   Optional     Alpha numeric Ledger Folio particulars
+     9      User defined limit for individual credit         13          NUM         Optional     User defined limit which would be taken for
+            items                                                                                 validating the individual items (in paise)
+    10      Total items                                      9           NUM         Mandatory    Total number of items
+    11      Total amount (Balancing Debit amount)            13          NUM         Mandatory    Amount in paise
+    12      Settlement date (DDMMYYYY)                       8           NUM         Mandatory    Effective Date of Settlement, as desired by
+                                                                                                  Government Departments.
+    13      Item Sequence Number                             10          NUM         Mandatory    APBS Item Sequence number generated by NPCI
+
+    14      Checksum                                        10           NUM         Mandatory    Checksum generated by NPCI
+    15      Filler                                          15           NUM         Optional     Filler
+                                Total                       177
+
+                                                                  Credit Records
+     1      APBS Transaction Code                                   2 NUM            Mandatory    Transaction code 77 for APBS credit.
+                                                                                                  Code 88 will be used for returned transactions
+     2      Destination Bank IIN                                     9 NUM           Mandatory    6 digit Destination Bank IIN
+     3      Destination Account Type                                 2 NUM           Optional     Account type
+     4      Ledger Folio Number                                      3 ALP / NUM     Optional     Alphanumeric ledger folio particulars
+     5      Beneficiary Aadhaar Number                              15 NUM           Mandatory    Beneficiary's 12 digit Aadhaar Number
+     6      Beneficiary account holder's name                       40 ALP / NUM     Optional     Beneficiary's account name could be popopulated in
+                                                                                                  the event of a success tranx. If not provided, the
+                                                                                                  same will not be populated.
+     7      Sponsor Bank IIN                                         9 NUM           Mandatory    6 digit Sponsor Bank IIN
+     8      User number                                              7 ALP / NUM     Mandatory    Existing User number
+     9      User Name /Narration                                    20 ALP / NUM     Optional     Will contain Narration Data, same as what was
+                                                                                                  provided in INP file.
+    10      User Credit reference                                   13 ALP / NUM     Mandatory    User defined reference number such as ledger folio
+                                                                                                  number, share/debenture certificate number or any
+                                                                                                  other unique identification number given by user to
+                                                                                                  individual beneficiaries
+    11      Amount                                                  13 NUM           Mandatory    Amount in Paise
+    12      Item sequence Number                                    10 NUM           Mandatory    APBS item sequence number to be allotted by NPCI
+
+    13      Checksum                                                10 NUM           Mandatory    Checksum total generated by NPCI
+    14      Success Flag                                             1 NUM           Mandatory    Flag for items credited (1) and returned uncredited
+                                                                                                  (0), automatically generated by NPCI
+    15      Filler                                                   1 NUM           Optional     Used for internal purpose
+    16      Reason Code                                              2 NUM           Mandatory    Reason for not crediting the item
+    17      Destination Bank account number                         20 ALP/NUM       Optional     If the transaction is successful this field could be
+                                                                                                  populated.
+                                Total                       177
+
+
+
+
+                                                                                                                                          30
+Annexure-VII Aadhaar look up – reason code and description
+
+
+  Response Code         Description
+
+         0           Enabled for DBT
+         1           Disabled for DBT
+         2         Never Enabled for DBT
+         4          Cancelled by UIDAI
+
+
+
+
+                                                             31
+

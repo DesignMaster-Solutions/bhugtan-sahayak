@@ -88,3 +88,78 @@ Prizes per track on codeforindia.org/hackathon (read on 05/11/2026): 1st Rs 1,50
 2nd Rs 1,00,000, 3rd Rs 50,000 "per track / category"; the hub README (August) and the welcome
 e-mail say an overall podium instead. Discussion #52 asks which one applies. The FAQ sets no limit
 on projects per participant.
+
+## Verified on 05/11/2026 (this section wins over everything above)
+
+Each rule below was read in the official source; the text copy is in `sources/` (files starting
+`wb_` are Wayback copies of the official URL, because pmkisan.gov.in, pfms.nic.in, nsap.nic.in,
+ippbonline.com and npci.org.in do not answer from outside India). Nothing outside this list may
+appear in the app as a rule, number, path or fee.
+
+1. **Last seeded bank gets the money.** NPCI SOP for the Aadhaar Payments Bridge v3.0.2,
+   17/02/2021, hosted by DBT Mission:
+   https://dbtbharat.gov.in/data/dbt_payments/Standard-Operating-Procedure-of-Aadhaar-Payments-Bridge-(APB).pdf
+   "the bank seeding with the latest mandate date will be mapped in the NPCI mapper and all the
+   subsidies will be routed to that bank only"; "the mapper will hold good only the last record
+   updated". Banks de-seed on account closed / holder expired / account blocked or frozen, and
+   "Customer consent is not required for de-seeding". (`sources/dbtbharat_APB_SOP.txt`)
+2. **APB return reasons (the official list of why a credit bounces)**, same SOP: 01 Account
+   Closed; 10 Unclaimed/DEAF; 51 KYC Documents Pending; 53 Account Inoperative; 54 Account
+   dormant; 60 Account Holder Expired; 64 Aadhaar Number not Mapped to Account Number; 68 A/c
+   Blocked or Frozen; 71 Invalid Account type (NRE/PPF/CC/Loan/FD); 95 "Aadhaar number de-seeding
+   from NPCI mapper by bank - customer to contact his/her bank"; 96 "Aadhaar mapping does not exist".
+3. **Check which bank is seeded.** UIDAI FAQ "Direct Benefit Transfer" (updated 02 Jul 2026),
+   https://uidai.gov.in/en/direct-benefit-transfer : "You can check your bank seeding status from -
+   https://myaadhaar.uidai.gov.in/ ... fetched from the server of National Payment Corporation of
+   India (NPCI)" and alternatively https://base.npci.org.in/catalog/seedingRequestDetails . The
+   exact myAadhaar menu name is NOT confirmed: say "Bank seeding status in myAadhaar (login with
+   Aadhaar and OTP)" without naming more menus. UIDAI helpline 1947.
+   NPCI BASE options (MoRD PDF https://nrega.dord.gov.in/MGNREGA_new/Key-Features/Aadhaar_Sheeding_BASE.pdf):
+   "Request for Aadhaar Seeding / Check Your Service Status / Get Aadhaar Mapped Status / Get
+   Aadhaar Mapping History".
+4. **Fix seeding / change the DBT account.** UIDAI FAQ: "visit the bank branch where you have
+   opened the account and request the bank to link your Aadhaar with your account by filling up
+   the mandate and consent form of the bank"; "To change the bank account for receiving DBT funds,
+   please visit the respective bank branch and submit the mandate and consent form"; "You can
+   receive DBT benefits only in one account". (Seeding through net banking: NOT confirmed, do not say.)
+5. **Inoperative account.** RBI circular RBI/2023-24/105 DOR.SOG(LEG).REC/64/09.08.024/2023-24,
+   01/01/2024 (https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12589&Mode=0): inoperative =
+   no "customer induced transactions" for over two years; Annex I counts "Direct Benefit Transfer
+   (DBT) credits" as customer-induced (so an account that keeps getting DBT should not become
+   inoperative); banks must segregate scholarship and DBT zero-balance accounts so "the stipulation
+   of 'inoperative' account is not applicable"; activation by KYC "at all branches (including
+   non-home branches)" and V-CIP where the bank offers it; "No charges shall be levied for
+   activation"; processed within "three working days from the receipt of the complete application".
+   Cite it as "RBI circular of 1 January 2024" (it may since be consolidated in a 2025 Direction).
+6. **PM-KISAN.** PIB 2112399 (18/03/2025): "land seeding, Aadhaar based payment and eKYC have been
+   made mandatory. The benefits of the farmers, who did not complete these mandatory criteria, were
+   stopped." PIB 2330414 (30/10/2026): e-KYC by "OTP-based authentication, Biometric authentication,
+   Face authentication"; pmkisan.gov.in: biometric e-KYC at "CSC VLE Logins, PM-KISAN Mobile
+   Application and State Authorized User Logins". Status: https://pmkisan.gov.in/BeneficiaryStatus_New.aspx
+   ("Know Your Status": Registration No. + OTP to the e-KYC mobile; shows Payment Status, Bank Name,
+   UTR No., Payment Mode, Account Credited, Credited on; link "Know your registration no.").
+   PIB 2152566 (05/08/2025): 19th instalment "transaction success rate of 99.92%"; "major reasons
+   for transaction failure are de-seeding of Aadhaar number from NPCI mapper by the bank,
+   non-mapping of Aadhaar to account number, and account closure." PIB 1739603 (27/07/2021):
+   40,16,867 failed transactions till June 2021 out of 68,76,32,104; reasons include "Account
+   Inactive, Account Dormant ... Account Holder Expired, Account Blocked or Frozen, Inactive Aadhar".
+   PM-KISAN helpline numbers: NOT confirmed officially, do not show.
+7. **NSAP pensions.** nsap.nic.in "Track Pension Payment" (Pension payment detail of Beneficiary):
+   https://nsap.nic.in/ledgerHistroy.do?method=intialize , search by Sanction Order No/Application
+   No, name or mobile + State, District, captcha.
+8. **MGNREGA wages.** PIB 2112199 (18/03/2025, Lok Sabha): payment through ABPS "made mandatory with
+   effect from 1st January 2024"; if APBS fails, the alternative route is NACH (account-based);
+   "13.55 crore active workers". Status: nrega.dord.gov.in, "Search Job Card/ Work/ Musteroll/
+   Wagelist/ FTO" (https://mnregaweb4.dord.gov.in/netnrega/homesearch.htm).
+9. **Payments to an account (any scheme).** PFMS "Know Your Payments"
+   https://pfms.nic.in/static/KnowYourPayment_new.aspx : bank name, account number twice, word
+   verification, OTP to the registered mobile. The person types these on PFMS, never in our app.
+   Whether it lists failure reasons: NOT confirmed, do not claim. scholarships.gov.in links to PFMS
+   for scholarship payments.
+10. **IPPB.** ippbonline.com doorstep banking: "NIL charge for new account opening at your
+    doorstep", through the GDS/Postman; DBT page: "link your Aadhaar number with your IPPB savings
+    account for receiving your DBT money". (Doorstep seeding fee: NOT confirmed.)
+11. **Size.** dbtbharat.gov.in home (05/11/2026): FY 2026-27 so far ₹2,98,573 Cr and 426 Cr
+    transactions; cumulative ₹54,15,957 Cr.
+12. **Removed:** mylpg.in is no longer an official site (now a blog); LPG gets only the generic
+    Aadhaar-payment checks (1-5, 9). No official count of MGNREGA ABPS rejections was found.
