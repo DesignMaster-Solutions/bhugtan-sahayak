@@ -175,7 +175,7 @@ function causeCard(cause, i) {
 
 function renderResult() {
   $('arrears').replaceChildren(el('b', { textContent: t(ARREARS.note) }), ` ${t('source_label')}: `,
-    ARREARS.source.flatMap((s, j) => [j ? ' · ' : '', el('a', { href: s.url, target: '_blank', rel: 'noopener', textContent: s.name })]));
+    ...ARREARS.source.flatMap((s, j) => [j ? ' · ' : '', el('a', { href: s.url, target: '_blank', rel: 'noopener', textContent: s.name })]));
   $('causes').replaceChildren(...causes.map(causeCard));
   $('worked-btns').hidden = worked;
   $('worked-thanks').hidden = !worked;
