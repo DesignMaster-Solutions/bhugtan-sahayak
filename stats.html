@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bhugtan Sahayak · Usage numbers</title>
+  <meta name="description" content="Live, anonymous usage counts of Bhugtan Sahayak: diagnoses, top causes shown, requests copied or shared, and whether it worked, by language and by day.">
+  <meta name="theme-color" content="#14532d">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top"><div class="wrap top-row"><strong><a href="/" style="color:#fff;text-decoration:none">Bhugtan Sahayak</a></strong><span>Usage numbers</span></div></header>
+  <main class="wrap">
+    <h1>Live usage, counted without personal data</h1>
+    <p class="hint">Every number below is a real event from the public app. We count only the event name, the language and, for a diagnosis, the id of the top reason shown. Scheme answers, names, Aadhaar, bank and phone numbers and IP addresses are never sent or stored. Raw data: <a href="/api/stats">/api/stats</a> (JSON).</p>
+    <h2>Totals since <span id="since"></span></h2>
+    <table id="totals"><tbody></tbody></table>
+    <h2>Did it work?</h2>
+    <table id="worked"><tbody></tbody></table>
+    <h2>Top reason shown</h2>
+    <table id="causes"><thead><tr><th>Reason</th><th>Diagnoses</th></tr></thead><tbody></tbody></table>
+    <h2>By language</h2>
+    <table id="langs"><thead><tr><th></th><th>Diagnoses</th><th>Copied</th><th>Shared</th><th>Yes</th><th>No</th><th>Not yet</th></tr></thead><tbody></tbody></table>
+    <h2>By day (UTC)</h2>
+    <table id="days"><thead><tr><th>Day</th><th>Diagnoses</th><th>Copied</th><th>Shared</th><th>Yes</th><th>No</th><th>Not yet</th></tr></thead><tbody></tbody></table>
+    <p class="hint">Diagnoses = people who answered every question and saw the result. Copied / Shared = request letters copied or sent on WhatsApp. Yes / No / Not yet = answers to "Did it work?".</p>
+  </main>
+  <footer class="wrap foot"><p>Free and open-source: <a href="https://github.com/DesignMaster-Solutions/bhugtan-sahayak">github.com/DesignMaster-Solutions/bhugtan-sahayak</a></p></footer>
+  <script type="module">
+    import { STRINGS } from './i18n.js';
+    const EVENTS = ['diagnose', 'copy', 'share', 'worked_yes', 'worked_no', 'worked_notyet'];
+    const LABEL = { diagnose: 'Diagnoses', copy: 'Requests copied', share: 'Requests sent on WhatsApp', worked_yes: 'It worked', worked_no: 'It did not work', worked_notyet: 'Not yet' };
+    const { since, counts } = await (await fetch('/api/stats', { cache: 'no-store' })).json();
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
+    const row = (cells) => `<tr>${cells.map((c, i) => (i === 0 ? `<th>${esc(c)}</th>` : `<td>${esc(c)}</td>`)).join('')}</tr>`;
+    const n = (k) => counts[k] || 0;
+    document.getElementById('since').textContent = since;
+    document.querySelector('#totals tbody').innerHTML = EVENTS.slice(0, 3).map((e) => row([LABEL[e], n(`total:${e}`)])).join('');
+    document.querySelector('#worked tbody').innerHTML = EVENTS.slice(3).map((e) => row([LABEL[e], n(`total:${e}`)])).join('');
+    const causes = Object.keys(counts).filter((k) => k.startsWith('cause:')).sort((a, b) => counts[b] - counts[a]);
+    document.querySelector('#causes tbody').innerHTML = causes.map((k) => row([STRINGS.en[`c_${k.slice(6)}`] || k.slice(6), counts[k]])).join('');
+    const group = (prefix) => [...new Set(Object.keys(counts).filter((k) => k.startsWith(prefix)).map((k) => k.split(':')[1]))].sort();
+    const NAME = { en: 'English', hi: 'Hindi' };
+    document.querySelector('#langs tbody').innerHTML = group('lang:').map((l) => row([NAME[l] || l, ...EVENTS.map((e) => n(`lang:${l}:${e}`))])).join('');
+    document.querySelector('#days tbody').innerHTML = group('day:').reverse().map((d) => row([d, ...EVENTS.map((e) => n(`day:${d}:${e}`))])).join('');
+  </script>
+</body>
+</html>

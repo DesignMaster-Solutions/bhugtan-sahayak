@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bhugtan Sahayak · Why did my government payment not arrive?</title>
+  <meta name="description" content="PM-KISAN, pension, MGNREGA wages, scholarship or subsidy did not reach your bank? Find the likely reason, the official way to check it and the fix, in English and Hindi. No Aadhaar or bank number asked.">
+  <meta name="theme-color" content="#14532d">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314532d'/%3E%3Cpath d='M7 12h18v12H7zM7 16h18M11 8l5-3 5 3' stroke='%23f4c542' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-row">
+      <strong data-t="title">Bhugtan Sahayak</strong>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" lang="en">EN</button>
+        <button type="button" data-lang="hi" lang="hi">हिंदी</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" id="main" aria-live="polite">
+    <section id="intro">
+      <h1 data-t="tagline" tabindex="-1"></h1>
+      <p data-t="intro"></p>
+      <button type="button" class="primary" id="start" data-t="start"></button>
+    </section>
+
+    <section id="quiz" hidden>
+      <p class="step" id="step"></p>
+      <div class="bar"><span id="bar"></span></div>
+      <h2 id="question" tabindex="-1"></h2>
+      <p class="hint" id="pick" data-t="pick_all" hidden></p>
+      <div class="answers" id="answers"></div>
+      <div class="actions">
+        <button type="button" class="primary" id="next" data-t="next" hidden></button>
+        <button type="button" class="link" id="back" data-t="back"></button>
+      </div>
+    </section>
+
+    <section id="result" hidden>
+      <h2 data-t="result_title" tabindex="-1"></h2>
+      <p class="hint" data-t="result_note"></p>
+      <div id="causes"></div>
+      <div class="worked" id="worked">
+        <h3 data-t="worked_q"></h3>
+        <div class="actions" id="worked-btns">
+          <button type="button" data-worked="yes" data-t="worked_yes"></button>
+          <button type="button" data-worked="no" data-t="worked_no"></button>
+          <button type="button" data-worked="notyet" data-t="worked_notyet"></button>
+        </div>
+        <p id="worked-thanks" data-t="worked_thanks" hidden></p>
+      </div>
+      <button type="button" class="link" id="restart" data-t="restart"></button>
+    </section>
+  </main>
+
+  <footer class="wrap foot">
+    <p class="otp" data-t="otp_warn"></p>
+    <p><span data-t="footer_gov"></span> <a href="https://github.com/DesignMaster-Solutions/bhugtan-sahayak#sources" target="_blank" rel="noopener" data-t="footer_sources"></a> · <a href="/stats" data-t="stats_link"></a></p>
+  </footer>
+</body>
+</html>
