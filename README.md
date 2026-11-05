@@ -163,7 +163,7 @@ Each rule was broken on purpose, `npm test` was run, a test failed, and the file
 | "no charge" removed from the English reactivation letter | the reactivation request cites the RBI circular of 1 January 2024 and "no charge" |
 | the letter says "You will get the money." | requestText never promises money ...; no string promises money or names an amount |
 
-Re-run after the build, with 12 more mutations of `rules.js` and `i18n.js`, each making at least one test fail: new account ignored, closed account without `deseeded`, 1-2 years + stopped not counted as old, KYC ignored, PM-KISAN e-KYC ignored, land ignored, MGNREGA without `mgnrega_abps`, "paid but not received" without `credited_elsewhere`, never came led by the mapper, limit of 5 raised to 6, letter without the blanks, a Hindi key removed.
+Re-run after the build, with 12 more mutations of `rules.js` and `i18n.js`, each making at least one test fail: new account ignored, closed account without `deseeded`, 1-2 years + stopped not counted as old, KYC ignored, PM-KISAN e-KYC ignored, land ignored, MGNREGA without `mgnrega_abps`, "paid but not received" without `credited_elsewhere`, never came led by the mapper, limit of 5 raised to 6, letter without the blanks, one `en` key removed (keys no longer match `hi`).
 
 The flow was also driven end to end in Chrome at 360 px through `wrangler dev`: answers, result
 card, Hindi toggle, letter language toggle, Copy, "Did it work?", and the counter (counted without
