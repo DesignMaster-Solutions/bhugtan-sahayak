@@ -153,6 +153,18 @@ code 54 dropped from `inoperative`, `kyc_frozen` dropped from the failed-payment
 coverage of the official reasons, not use in the field: no public count of failures per reason was
 found.
 
+## Real cases
+
+`evidence/real-cases/` holds 12 published decisions (6 High Court, 6 Central Information Commission, 2019 to
+2026) where a PM-KISAN instalment, a pension, an LPG subsidy or a scholarship did not reach the person: Aadhaar
+not linked, Aadhaar seeded to another account, e-KYC or land not done, a wrong account number, accounts changed
+by officials, a name or Aadhaar number mismatch, a bank credit limit. `tests/real-cases.test.mjs` checks each
+quote word for word against the saved decision and replays the person's answers through `likelyCauses`. The
+cause the decision names is one the app has in 7 of 12; for the 4 where the decision says what the person saw,
+the app lists it in 3. The gaps (wrong Aadhaar number on the scheme record, name and bank details mismatch, credit
+limit) and every other difference are written down in `evidence/real-cases/README.md`. This is a replay of real
+cases, not use in the field.
+
 ## Privacy and usage numbers
 
 Live and public at `/stats` (JSON at `/api/stats`). The app sends, with `navigator.sendBeacon`,
@@ -165,7 +177,7 @@ or phone numbers, no IP. `?nostats` sends nothing.
 
 ## Tests
 
-`npm test` (30 tests; the first 27 written before the code they test):
+`npm test` (81 tests; the first 27 written before the code they test):
 
 - every scheme x symptom x last-received x changes (x PM-KISAN answers) gives 1 to 5 known causes,
   no duplicates; every cause has at least one official `https` check for every scheme and a fix
@@ -180,6 +192,8 @@ or phone numbers, no IP. `?nostats` sends nothing.
   12-digit number;
 - every official PM-KISAN failure reason (PIB 2152566, PIB 1739603) maps to the cause and APB code in
   "Official failure reasons, replayed", and the uncovered ones stay listed as uncovered;
+- 12 real decisions (see "Real cases") replay through `likelyCauses`, with every quote checked
+  word for word in the saved decision and the numbers in `evidence/real-cases/README.md` recomputed;
 - `en` and `hi` have exactly the same keys and no empty string;
 - `styles.css` keeps `[hidden]` elements hidden (added after the walk-through on a real browser found "Next" showing on single-choice steps, where it skipped a question unanswered);
 - the Worker counts valid events and rejects bad ones (405 wrong method, 400 bad event / language /

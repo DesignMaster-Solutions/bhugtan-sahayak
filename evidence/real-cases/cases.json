@@ -1,0 +1,687 @@
+{
+ "_about": "Real published decisions (High Courts and the Central Information Commission) where a beneficiary did not get, or stopped getting, a government DBT payment. Every fact comes from the decision text saved in sources/<doc>.txt; null means the decision does not say it. 'answers' are what the person would enter on the app's screens, only from facts in the decision (symptom null = the decision does not say what the person saw, so the replay covers every symptom). 'causes' are the app's cause ids for what the decision says stopped the money ([] = not stated, or not a reason the app has). 'replay' is what rules.js likelyCauses gives for those answers on 2026-11-05. 'app_path' is the fix, check and letter the app gives for a cause, checked against rules.js. Collected from indiankanoon.org on 2026-11-05.",
+ "cases": [
+  {
+   "id": "up-hc-2026-vishram-singh",
+   "url": "https://indiankanoon.org/doc/107086784/",
+   "source": "sources/107086784.txt",
+   "forum": "Allahabad High Court (Division Bench)",
+   "case_number": "Writ C No. 36622 of 2026",
+   "decision_date": "2026-10-08",
+   "state": "Uttar Pradesh (Kanpur Dehat)",
+   "scheme": "PM-KISAN",
+   "people": 1,
+   "blocked_by": "scheme_ekyc_or_land",
+   "what_stopped_the_money": "IFSC of his branch entered wrongly; once payment moved to Aadhaar based DBT, land and Aadhaar seeding were Yes and the only flaw left was e-KYC, shown as No",
+   "amount": "23 instalments",
+   "wait": "represented on 08.01.2020; the court says he suffered for almost six years",
+   "outcome": "writ allowed: arrears by 30.11.2026 with 6% interest from each due date, Rs 5,000 costs; e-KYC and farmer registry completed on 18.09.2026 after the interim mandamus",
+   "quotes": [
+    {
+     "text": "the disbursement of the installment amount was withheld on account of non-compliance with the mandatory e-KYC authentication requirement on the portal, where the petitioners e-KYC status is reflected as No",
+     "where": "para 7"
+    }
+   ],
+   "answers": {
+    "scheme": "pmkisan",
+    "symptom": "never_came",
+    "lastReceived": "never",
+    "changes": [],
+    "ekyc": "no",
+    "land": "yes"
+   },
+   "causes": [
+    "pmkisan_ekyc"
+   ],
+   "court_path": "complete the e-KYC (done by the authorities after the court's order); the IFSC mattered less once payment was Aadhaar based",
+   "app_path": [
+    {
+     "cause": "pmkisan_ekyc",
+     "where": "csc",
+     "check": "pmkisan_ekyc",
+     "letter": "ekyc"
+    }
+   ],
+   "divergence": "The app puts e-KYC first and sends him to a CSC or the PM-KISAN app. It says nothing about a wrong IFSC, which matches the State's point that under Aadhaar based payment the IFSC is not what routes the money. The app does not tell him that arrears and interest can be claimed, which is what the court gave.",
+   "code": null,
+   "replay": {
+    "never_came": [
+     "pmkisan_ekyc",
+     "not_mapped",
+     "mapper_other_bank"
+    ]
+   }
+  },
+  {
+   "id": "up-hc-2023-om-prakash-dubey",
+   "url": "https://indiankanoon.org/doc/89624512/",
+   "source": "sources/89624512.txt",
+   "forum": "Allahabad High Court (Division Bench)",
+   "case_number": "Writ C No. 36694 of 2022",
+   "decision_date": "2023-03-17",
+   "state": "Uttar Pradesh",
+   "scheme": "PM-KISAN",
+   "people": 1,
+   "blocked_by": "wrong_account_or_diverted",
+   "what_stopped_the_money": "nine instalments were paid into another account because his account number was fed wrongly; the State had first blamed e-KYC (Rejected, eKYC Done: No) and land verification",
+   "amount": "9 instalments",
+   "wait": null,
+   "outcome": "State to pay the nine instalments within one month; later instalments to his account through his Aadhaar number",
+   "quotes": [
+    {
+     "text": "nine installments were inadvertently paid in another account due to wrong feeding of account number",
+     "where": "State's instructions of 01.03.2023"
+    },
+    {
+     "text": "Aadhaar Demo Authentication Status is concerned the same is shown as \"Rejected, eKYC Done : No\"",
+     "where": "order of 28.02.2023 quoted in the decision"
+    }
+   ],
+   "answers": {
+    "scheme": "pmkisan",
+    "symptom": null,
+    "lastReceived": null,
+    "changes": [],
+    "ekyc": "no",
+    "land": "no"
+   },
+   "causes": [
+    "credited_elsewhere",
+    "pmkisan_ekyc",
+    "pmkisan_land"
+   ],
+   "court_path": "pay the instalments sent to the wrong account and pay the next ones through Aadhaar",
+   "app_path": [
+    {
+     "cause": "credited_elsewhere",
+     "check": "pmkisan_status",
+     "letter": "utr"
+    },
+    {
+     "cause": "pmkisan_ekyc",
+     "where": "csc"
+    },
+    {
+     "cause": "pmkisan_land",
+     "where": "scheme_office"
+    }
+   ],
+   "divergence": "The decision does not say what his status page showed. The app shows 'sent, maybe to a different account' only if he answers that the status says paid; for any other answer it leads with e-KYC and land, the two reasons the State gave first. The app's step for a wrong account is to trace the UTR at the bank; here the agriculture office corrected the account and the court ordered the State, not the bank, to pay. For land the State named verification from the tehsil; the app says the village or block agriculture office.",
+   "code": null,
+   "replay": {
+    "never_came": [
+     "pmkisan_ekyc",
+     "not_mapped",
+     "pmkisan_land",
+     "mapper_other_bank"
+    ],
+    "stopped": [
+     "pmkisan_ekyc",
+     "deseeded",
+     "pmkisan_land",
+     "not_mapped",
+     "account_closed"
+    ],
+    "other_account": [
+     "mapper_other_bank",
+     "pmkisan_ekyc",
+     "pmkisan_land"
+    ],
+    "paid_not_received": [
+     "credited_elsewhere",
+     "pmkisan_ekyc",
+     "pmkisan_land",
+     "mapper_other_bank",
+     "account_closed"
+    ],
+    "rejected": [
+     "pmkisan_ekyc",
+     "not_mapped",
+     "pmkisan_land",
+     "deseeded",
+     "account_closed"
+    ]
+   }
+  },
+  {
+   "id": "cg-hc-2024-dharam-lal-patel",
+   "url": "https://indiankanoon.org/doc/22332517/",
+   "source": "sources/22332517.txt",
+   "forum": "High Court of Chhattisgarh",
+   "case_number": "WPC No. 3063 of 2024",
+   "decision_date": "2024-07-18",
+   "state": "Chhattisgarh (Sakti)",
+   "scheme": "PM-KISAN",
+   "people": 1,
+   "blocked_by": "not_stated",
+   "what_stopped_the_money": "paid instalments 1 to 5, then nothing; the portal showed 'stop payment' against his name and no reason was given to him",
+   "amount": "instalments from the 6th onward (prayer: 6th to 16th)",
+   "wait": "block office letter of 13.09.2023 still not acted on about 10 months later",
+   "outcome": "Deputy Director to decide on the block office's letter within four weeks and tell him",
+   "quotes": [
+    {
+     "text": "in the portal in front of the name of petitioner is showing stop payment",
+     "where": "para 2"
+    }
+   ],
+   "answers": {
+    "scheme": "pmkisan",
+    "symptom": "stopped",
+    "lastReceived": "over2y",
+    "changes": [],
+    "ekyc": null,
+    "land": null
+   },
+   "causes": [],
+   "court_path": "the officer must decide and tell him the reason",
+   "app_path": [
+    {
+     "cause": "pmkisan_ekyc",
+     "check": "pmkisan_status"
+    }
+   ],
+   "divergence": "No cause is named, so nothing to match. The app's first check for his answers is the PM-KISAN status page, the page that showed 'stop payment'; the app has no cause for a stop entered by an officer and no step to demand the written reason.",
+   "code": null,
+   "replay": {
+    "stopped": [
+     "pmkisan_ekyc",
+     "inoperative",
+     "deseeded",
+     "pmkisan_land",
+     "not_mapped"
+    ]
+   }
+  },
+  {
+   "id": "up-hc-2026-nanuaram",
+   "url": "https://indiankanoon.org/doc/110565552/",
+   "source": "sources/110565552.txt",
+   "forum": "Allahabad High Court",
+   "case_number": "Contempt Application (Civil) No. 1322 of 2024 (from Writ C No. 31192 of 2023)",
+   "decision_date": "2026-04-10",
+   "state": "Uttar Pradesh (Aligarh)",
+   "scheme": "PM-KISAN",
+   "people": 1,
+   "blocked_by": "name_or_aadhaar_mismatch",
+   "what_stopped_the_money": "only the first instalment came; the Aadhaar number he first gave and the one he gave later did not match, so his application was not processed",
+   "amount": "all instalments after the first",
+   "wait": "representation of 05.06.2023 decided on 01.07.2024",
+   "outcome": "contempt dismissed; he was told to file a fresh form with a valid Aadhaar number and had not done it",
+   "quotes": [
+    {
+     "text": "as correct AADHAR Card number was not provided by the applicant, his application was not processed",
+     "where": "para 5"
+    }
+   ],
+   "answers": {
+    "scheme": "pmkisan",
+    "symptom": "stopped",
+    "lastReceived": null,
+    "changes": [],
+    "ekyc": null,
+    "land": null
+   },
+   "causes": [],
+   "court_path": "file a fresh PM-KISAN form with the correct Aadhaar number",
+   "app_path": [],
+   "divergence": "Gap: the app has no reason for a wrong Aadhaar number on the scheme record. It shows e-KYC, de-seeding, land, seeding and a closed account, and none of its steps says to correct the Aadhaar number with the agriculture office.",
+   "code": null,
+   "replay": {
+    "stopped": [
+     "pmkisan_ekyc",
+     "deseeded",
+     "pmkisan_land",
+     "not_mapped",
+     "account_closed"
+    ]
+   }
+  },
+  {
+   "id": "cic-2023-rajendra",
+   "url": "https://indiankanoon.org/doc/177549408/",
+   "source": "sources/177549408.txt",
+   "forum": "Central Information Commission",
+   "case_number": "CIC/DOA&C/A/2022/606831",
+   "decision_date": "2023-04-13",
+   "state": "Uttar Pradesh (Charthawal, Muzaffarnagar)",
+   "scheme": "PM-KISAN",
+   "people": 1,
+   "blocked_by": "scheme_ekyc_or_land",
+   "what_stopped_the_money": "nothing after August 2020; PFMS rejected his data because the bank did not respond in time, and the PG portal reply gave non-seeding of his agricultural land",
+   "amount": null,
+   "wait": "no instalment from August 2020 to his RTI of 13.12.2021",
+   "outcome": "CPIO told to give a revised categorical reply with the full facts within 2 days",
+   "quotes": [
+    {
+     "text": "the data of beneficiary has been rejected by PFMS and the ground for rejection is that the no response received from banks within specified days",
+     "where": "CPIO reply of 10.01.2022"
+    },
+    {
+     "text": "owing to non-seeding of agricultural land of the Appellant with the claim",
+     "where": "CPIO at the hearing"
+    }
+   ],
+   "answers": {
+    "scheme": "pmkisan",
+    "symptom": "stopped",
+    "lastReceived": "1to2y",
+    "changes": [],
+    "ekyc": null,
+    "land": "no"
+   },
+   "causes": [
+    "pmkisan_land"
+   ],
+   "court_path": "the CPIO advised him to ask the bank branch why it did not respond, and to change the account or move to Aadhaar payment through the PM-KISAN nodal officer if the account was not operative",
+   "app_path": [
+    {
+     "cause": "pmkisan_land",
+     "where": "scheme_office",
+     "letter": "land"
+    },
+    {
+     "cause": "inoperative",
+     "where": "bank_branch",
+     "letter": "reactivate"
+    }
+   ],
+   "divergence": "Land is 4th of 5 in the app's list because e-KYC (not yet required in 2020) and an inoperative account come first; the inoperative step is the bank branch, which is what the CPIO advised. The app has no reason for 'no response from the bank'.",
+   "code": null,
+   "replay": {
+    "stopped": [
+     "pmkisan_ekyc",
+     "inoperative",
+     "deseeded",
+     "pmkisan_land",
+     "not_mapped"
+    ]
+   }
+  },
+  {
+   "id": "cic-2022-rampati",
+   "url": "https://indiankanoon.org/doc/22062359/",
+   "source": "sources/22062359.txt",
+   "forum": "Central Information Commission",
+   "case_number": "CIC/NICHQ/C/2020/691071",
+   "decision_date": "2022-04-20",
+   "state": "Uttar Pradesh",
+   "scheme": "PM-KISAN",
+   "people": 1,
+   "blocked_by": "not_stated",
+   "what_stopped_the_money": "registered by the UP Agriculture Department on 31.07.2019; not one instalment credited to her SBI account; the reason was never given",
+   "amount": "all instalments",
+   "wait": "registered 31.07.2019, still nothing at the RTI of 25.09.2020",
+   "outcome": "complaint dismissed: NIC said the State agriculture department holds the data",
+   "quotes": [
+    {
+     "text": "till today not a single installment has been credited into her account number",
+     "where": "information sought"
+    }
+   ],
+   "answers": {
+    "scheme": "pmkisan",
+    "symptom": "never_came",
+    "lastReceived": "never",
+    "changes": [],
+    "ekyc": null,
+    "land": null
+   },
+   "causes": [],
+   "court_path": null,
+   "app_path": [
+    {
+     "cause": "not_mapped",
+     "check": "myaadhaar"
+    }
+   ],
+   "divergence": "No cause in the decision. Her grandson asked NIC for the PFMS response; the app points to the PM-KISAN status page and the seeding checks, which a farmer can open without an RTI.",
+   "code": null,
+   "replay": {
+    "never_came": [
+     "pmkisan_ekyc",
+     "not_mapped",
+     "pmkisan_land",
+     "mapper_other_bank"
+    ]
+   }
+  },
+  {
+   "id": "cic-2020-geeta",
+   "url": "https://indiankanoon.org/doc/24499187/",
+   "source": "sources/24499187.txt",
+   "forum": "Central Information Commission",
+   "case_number": "CIC/DOWCD/A/2018/159683",
+   "decision_date": "2020-06-19",
+   "state": "Delhi",
+   "scheme": "Delhi widow pension (Department of Women and Child Development)",
+   "people": 1,
+   "blocked_by": "aadhaar_not_seeded",
+   "what_stopped_the_money": "widow pension stopped because her Aadhaar number was not linked; credited again to her Syndicate Bank account once it was",
+   "amount": null,
+   "wait": null,
+   "outcome": "no further intervention; she said she had been getting the pension for the past year",
+   "quotes": [
+    {
+     "text": "widow pension was stopped since her Aadhaar number was not linked",
+     "where": "PIO's submission at the hearing"
+    }
+   ],
+   "answers": {
+    "scheme": "pension",
+    "symptom": "stopped",
+    "lastReceived": null,
+    "changes": [],
+    "ekyc": null,
+    "land": null
+   },
+   "causes": [
+    "not_mapped"
+   ],
+   "court_path": "link the Aadhaar number; the pension resumed once it was",
+   "app_path": [
+    {
+     "cause": "not_mapped",
+     "where": "bank_branch",
+     "check": "myaadhaar",
+     "letter": "seed"
+    }
+   ],
+   "divergence": "The decision does not say whether the Aadhaar was missing from the bank account or from the pension record; the app's step covers the bank account only.",
+   "code": null,
+   "replay": {
+    "stopped": [
+     "deseeded",
+     "not_mapped",
+     "account_closed"
+    ]
+   }
+  },
+  {
+   "id": "cic-2019-sushila",
+   "url": "https://indiankanoon.org/doc/55862438/",
+   "source": "sources/55862438.txt",
+   "forum": "Central Information Commission",
+   "case_number": "CIC/DOWCD/A/2019/112784",
+   "decision_date": "2019-10-03",
+   "state": "Delhi",
+   "scheme": "Delhi widow pension (Department of Women and Child Development)",
+   "people": 1,
+   "blocked_by": "aadhaar_other_account",
+   "what_stopped_the_money": "no pension after 23 March 2015; she then found it had been going to two accounts, an IDBI account and an Aadhaar linked SBI account, and returned the extra Rs 9,000; it resumed in January 2019",
+   "amount": "nothing paid for the months from March 2015 until it resumed; the Department says it pays only 6 months of arrears in such cases",
+   "wait": "no pension from March 2015 until January 2019",
+   "outcome": "remanded to the First Appellate Authority to decide on merits within a month",
+   "quotes": [
+    {
+     "text": "her pension was being credited in two bank accounts i.e. IDBI Account and Adhaar linked SBI account",
+     "where": "hearing"
+    },
+    {
+     "text": "amount pertaining to only 6 months is provided in such cases to the pensioners",
+     "where": "respondent's submission"
+    }
+   ],
+   "answers": {
+    "scheme": "pension",
+    "symptom": "stopped",
+    "lastReceived": "over2y",
+    "changes": [],
+    "ekyc": null,
+    "land": null
+   },
+   "causes": [
+    "mapper_other_bank"
+   ],
+   "court_path": "decide her arrears; the Commission did not decide them itself",
+   "app_path": [
+    {
+     "cause": "deseeded",
+     "check": "myaadhaar"
+    }
+   ],
+   "divergence": "Answering 'stopped', she would not see 'seeded to another bank account'; it shows only if she answers that the money goes to another account. The app's second reason (de-seeding) sends her to myAadhaar Bank seeding status, which shows the bank her Aadhaar is seeded to, here SBI. The app says nothing about arrears or the 6 month rule.",
+   "code": null,
+   "replay": {
+    "stopped": [
+     "inoperative",
+     "deseeded",
+     "not_mapped",
+     "account_closed"
+    ]
+   }
+  },
+  {
+   "id": "cic-2025-madhu-devki",
+   "url": "https://indiankanoon.org/doc/26867350/",
+   "source": "sources/26867350.txt",
+   "forum": "Central Information Commission",
+   "case_number": "CIC/DSWGD/A/2023/119725",
+   "decision_date": "2025-01-16",
+   "state": "Delhi",
+   "scheme": "Delhi disability pension (Financial Assistance to Persons with Special Needs)",
+   "people": 1,
+   "blocked_by": "name_or_aadhaar_mismatch",
+   "what_stopped_the_money": "approved on 13.05.2020 but paid only from 30.11.2023, because of wrong mapping of her name and bank details; arrears limited to one year by a 04.08.2023 office order for remittance failures",
+   "amount": "compensation of Rs 92,000 ordered",
+   "wait": "applied November 2018, approved 13.05.2020, first paid 30.11.2023",
+   "outcome": "Department of Social Welfare ordered to pay Rs 92,000 compensation within a week",
+   "quotes": [
+    {
+     "text": "delay in payment was due to wrong mapping of name and bank details",
+     "where": "revised reply of 13.01.2025"
+    },
+    {
+     "text": "In cases of remittance failure due to non-validation of Aadhaar/Account or any other technical/non-technical reasons, arrears for a maximum period of one year only or actual arrear amount, whichever is less, shall be payable to the beneficiary",
+     "where": "office order of 04.08.2023, quoted by the respondent"
+    }
+   ],
+   "answers": {
+    "scheme": "pension",
+    "symptom": "never_came",
+    "lastReceived": "never",
+    "changes": [],
+    "ekyc": null,
+    "land": null
+   },
+   "causes": [],
+   "court_path": "compensation for the years lost; the Commission called the one year arrears order contrary to the citizen charter",
+   "app_path": [
+    {
+     "cause": "not_mapped",
+     "check": "myaadhaar"
+    }
+   ],
+   "divergence": "Gap: the app has no reason for a name or bank details that do not match the scheme record, and does not warn that a remittance failure can cost all but one year of arrears.",
+   "code": null,
+   "replay": {
+    "never_came": [
+     "not_mapped",
+     "mapper_other_bank"
+    ]
+   }
+  },
+  {
+   "id": "cic-2020-shrinivas-mishra",
+   "url": "https://indiankanoon.org/doc/166822003/",
+   "source": "sources/166822003.txt",
+   "forum": "Central Information Commission",
+   "case_number": "CIC/IOCLD/A/2018/145988-BJ",
+   "decision_date": "2020-02-06",
+   "state": null,
+   "scheme": "LPG subsidy (Indian Oil, DBTL)",
+   "people": 1,
+   "blocked_by": "aadhaar_not_seeded",
+   "what_stopped_the_money": "LPG subsidy withheld because his Aadhaar was not linked with his bank account; credited regularly once it was",
+   "amount": null,
+   "wait": null,
+   "outcome": "no further intervention; advised to approach another forum",
+   "quotes": [
+    {
+     "text": "due to non-linkage of the Aadhar account of the Appellant with his bank account, the release of subsidy was withheld",
+     "where": "respondent's reply at the hearing"
+    }
+   ],
+   "answers": {
+    "scheme": "other",
+    "symptom": null,
+    "lastReceived": null,
+    "changes": [],
+    "ekyc": null,
+    "land": null
+   },
+   "causes": [
+    "not_mapped"
+   ],
+   "court_path": "link the Aadhaar with the bank account",
+   "app_path": [
+    {
+     "cause": "not_mapped",
+     "where": "bank_branch",
+     "check": "myaadhaar",
+     "letter": "seed"
+    }
+   ],
+   "divergence": "The app has no LPG option; he would choose 'other'. 'Not seeded' is shown for every answer except 'goes to another account' and 'status says paid'.",
+   "code": null,
+   "replay": {
+    "never_came": [
+     "not_mapped",
+     "mapper_other_bank"
+    ],
+    "stopped": [
+     "deseeded",
+     "not_mapped",
+     "account_closed"
+    ],
+    "other_account": [
+     "mapper_other_bank"
+    ],
+    "paid_not_received": [
+     "credited_elsewhere",
+     "mapper_other_bank",
+     "account_closed"
+    ],
+    "rejected": [
+     "not_mapped",
+     "deseeded",
+     "account_closed",
+     "kyc_frozen",
+     "inoperative"
+    ]
+   }
+  },
+  {
+   "id": "up-hc-2024-shahjahanpur-pensioners",
+   "url": "https://indiankanoon.org/doc/18189583/",
+   "source": "sources/18189583.txt",
+   "forum": "Allahabad High Court",
+   "case_number": "Criminal Misc. Anticipatory Bail Application u/s 438 Cr.P.C. No. 280 of 2024",
+   "decision_date": "2024-01-25",
+   "state": "Uttar Pradesh (Shahjahanpur)",
+   "scheme": "UP old age pension",
+   "people": null,
+   "blocked_by": "wrong_account_or_diverted",
+   "what_stopped_the_money": "FIR alleges the District Social Welfare Officer and computer operators changed old age pensioners' bank accounts and took Rs 2.52 crore; a first committee found 9 of 21 accounts changed",
+   "amount": "Rs 2,52,39,000 alleged",
+   "wait": null,
+   "outcome": "anticipatory bail of the District Social Welfare Officer refused",
+   "quotes": [
+    {
+     "text": "misappropriated the public money of Rs.2 crores 52 lacs 39 thousand with the help of touts and mediators by changing bank accounts of old age pensioners",
+     "where": "brief facts (the FIR)"
+    }
+   ],
+   "answers": {
+    "scheme": "pension",
+    "symptom": null,
+    "lastReceived": null,
+    "changes": [],
+    "ekyc": null,
+    "land": null
+   },
+   "causes": [
+    "credited_elsewhere"
+   ],
+   "court_path": "criminal case; the decision is about the officer's bail, not about paying the pensioners",
+   "app_path": [
+    {
+     "cause": "credited_elsewhere",
+     "check": "nsap",
+     "letter": "utr"
+    }
+   ],
+   "divergence": "These are allegations in an FIR, not findings. A pensioner sees 'sent to a different account' only by answering that the status says paid; the app's step is to trace the UTR at the bank, and it has no step for an account changed by an official (complaint to the District Magistrate or police).",
+   "code": null,
+   "replay": {
+    "never_came": [
+     "not_mapped",
+     "mapper_other_bank"
+    ],
+    "stopped": [
+     "deseeded",
+     "not_mapped",
+     "account_closed"
+    ],
+    "other_account": [
+     "mapper_other_bank"
+    ],
+    "paid_not_received": [
+     "credited_elsewhere",
+     "mapper_other_bank",
+     "account_closed"
+    ],
+    "rejected": [
+     "not_mapped",
+     "deseeded",
+     "account_closed",
+     "kyc_frozen",
+     "inoperative"
+    ]
+   }
+  },
+  {
+   "id": "up-hc-2023-amit-yadav",
+   "url": "https://indiankanoon.org/doc/50156077/",
+   "source": "sources/50156077.txt",
+   "forum": "Allahabad High Court, Lucknow Bench (Division Bench)",
+   "case_number": "Special Appeal Defective No. 48 of 2023 (from Writ A No. 18995 of 2019)",
+   "decision_date": "2023-04-12",
+   "state": "Uttar Pradesh",
+   "scheme": "UP post-matric scholarship (OBC Welfare Department)",
+   "people": 1,
+   "blocked_by": "bank_limit",
+   "what_stopped_the_money": "Rs 54,400 sanctioned; only Rs 4,400 credited because the bank had set a credit limit on the account, and the rest went back to the State",
+   "amount": "Rs 50,000",
+   "wait": "academic year 2018-19, decided 12.04.2023",
+   "outcome": "State's appeal dismissed; the single judge's order to pay stands",
+   "quotes": [
+    {
+     "text": "amount exceed limits set on account by Bank for credit.",
+     "where": "undisputed facts"
+    }
+   ],
+   "answers": {
+    "scheme": "scholarship",
+    "symptom": "rejected",
+    "lastReceived": null,
+    "changes": [],
+    "ekyc": null,
+    "land": null
+   },
+   "causes": [],
+   "code": "57",
+   "court_path": "the State must pay; a failed credit is not a reason to deny the scholarship",
+   "app_path": [],
+   "divergence": "Gap already listed in tests/official-reasons.test.mjs: APB code 57 (amount exceeds the limit set on the account) has no reason in the app, so no step tells the student to ask the bank to lift the limit.",
+   "replay": {
+    "rejected": [
+     "not_mapped",
+     "deseeded",
+     "account_closed",
+     "kyc_frozen",
+     "inoperative"
+    ]
+   }
+  }
+ ]
+}
