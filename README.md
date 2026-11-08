@@ -72,8 +72,10 @@ npx wrangler deploy
 5. Last received over two years ago (or 1 to 2 years ago and it stopped): `inoperative`.
 6. Then the usual lead for the symptom (never came: `not_mapped`; stopped: `deseeded`; rejected:
    `not_mapped`), MGNREGA `mgnrega_abps`, PM-KISAN land `pmkisan_land`, a rejected scholarship
-   `bank_limit`, and the other reasons PIB 2152566 names (de-seeding, non-mapping, account closure),
-   then never came `name_mismatch`, went to another account `credited_elsewhere`, rejected `bank_limit`.
+   `bank_limit`, and the other reasons PIB 2152566 names (de-seeding, non-mapping, account closure; for a
+   payment that stopped, the other bank account seeded to the Aadhaar comes before closure, as in CIC 2019
+   Sushila, whose pension was going to her other Aadhaar-linked account), then never came `name_mismatch`,
+   went to another account `credited_elsewhere`, rejected `bank_limit`.
 7. At most 6 reasons (the official PM-KISAN failure list a farmer can fix has 6), trimmed from the end.
 
 Every result also shows one warning: "Act soon. In two published decisions, after a failed payment the

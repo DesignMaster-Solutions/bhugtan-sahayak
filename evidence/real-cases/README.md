@@ -42,10 +42,10 @@ bank credit, the step this app is about.
 - The cause named in the decision is a reason the app has in 10 of 12, and not stated: 2. The first replay (commit
   `8f27c1d`) found 3 gaps: a wrong Aadhaar number on the scheme record, a name and bank details mismatch, a bank
   credit limit. Each is now a reason with an official source, so 0 gaps remain among the stated causes.
-- Where the decision says what the person saw (7 of the 10), the app lists the cause for those answers in 6 of 7,
+- Where the decision says what the person saw (7 of the 10), the app lists the cause for those answers in 7 of 7,
   first in 1 (Vishram Singh: e-KYC first; Geeta: Aadhaar not seeded second; Nanuaram: wrong Aadhaar number on
   the record second, if he ticks that he gave a different number; Amit Yadav: credit limit second; Madhu: name
-  or bank details mismatch third; Rajendra: land fourth; Sushila: not listed). Where it does not say (3 of 10),
+  or bank details mismatch third; Rajendra: land fourth; Sushila: Aadhaar seeded to another bank account fourth). Where it does not say (3 of 10),
   the cause is listed for at least one answer in 3 of 3; for the two wrong-account cases if the person answers
   that the status says paid or that it went to another account.
 - Money stated in the decisions: 23 instalments (Vishram Singh), 9 instalments (Om Prakash Dubey), Rs 50,000
@@ -76,8 +76,9 @@ Every case has a `divergence` in `cases.json`. The main ones:
 - **Money sent to another account.** For Om Prakash Dubey and the Shahjahanpur pensioners the decision does not
   say what they saw. The app lists "sent, maybe to a different account" first for "status says paid" and, since
   this round, also for "it went to another account" (after the NPCI mapper); for the other answers it does not.
-  Sushila, answering "stopped", would not see "seeded to another bank account", although the check for the app's
-  second reason (myAadhaar Bank seeding status) shows which bank the Aadhaar is seeded to.
+  Sushila, answering "stopped", sees "seeded to another bank account" fourth since 8 November 2026 (before that
+  it showed only for "it went to another account"); its check, myAadhaar Bank seeding status, shows which bank
+  the Aadhaar is seeded to, here SBI.
 - **Only part came.** Amit Yadav got Rs 4,400 of Rs 54,400; the app has no answer for "only part came", so the
   replay uses "it was rejected".
 - **Officials' steps the app does not cover.** A "stop payment" put on the portal with no reason (Dharam Lal

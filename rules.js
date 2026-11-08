@@ -97,7 +97,7 @@ export function likelyCauses({ scheme, symptom, lastReceived, changes = [], ekyc
   // Base lead per symptom, then the scheme blocks, then the rest of the usual reasons (PIB 2152566 order).
   const BASE = {
     never_came: ['not_mapped', 'mapper_other_bank', 'name_mismatch'],
-    stopped: ['deseeded', 'not_mapped', 'account_closed'],
+    stopped: ['deseeded', 'not_mapped', 'mapper_other_bank', 'account_closed'],
     other_account: ['mapper_other_bank', 'credited_elsewhere'],
     paid_not_received: ['credited_elsewhere', 'mapper_other_bank', 'account_closed'],
     rejected: ['not_mapped', 'deseeded', 'account_closed', 'kyc_frozen', 'inoperative', 'bank_limit'],

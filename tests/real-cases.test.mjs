@@ -84,7 +84,7 @@ function aggregates() {
 
 test('aggregate numbers as computed today (change the README and status together)', () => {
   assert.deepEqual(aggregates(), {
-    total: 12, named: 10, gaps: 0, notStated: 2, knownShown: 6, known: 7, first: 1, unknown: 3, unknownShown: 3, people: 11, pmkisan: 6,
+    total: 12, named: 10, gaps: 0, notStated: 2, knownShown: 7, known: 7, first: 1, unknown: 3, unknownShown: 3, people: 11, pmkisan: 6,
     kinds: { aadhaar_not_seeded: 2, aadhaar_other_account: 1, scheme_ekyc_or_land: 2, wrong_account_or_diverted: 2, name_or_aadhaar_mismatch: 2, bank_limit: 1, not_stated: 2 },
   });
 });

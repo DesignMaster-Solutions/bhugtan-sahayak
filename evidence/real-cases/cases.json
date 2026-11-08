@@ -122,6 +122,7 @@
      "deseeded",
      "pmkisan_land",
      "not_mapped",
+     "mapper_other_bank",
      "account_closed"
     ],
     "other_account": [
@@ -193,7 +194,7 @@
      "deseeded",
      "pmkisan_land",
      "not_mapped",
-     "account_closed"
+     "mapper_other_bank"
     ]
    }
   },
@@ -248,7 +249,7 @@
      "deseeded",
      "pmkisan_land",
      "not_mapped",
-     "account_closed"
+     "mapper_other_bank"
     ]
    }
   },
@@ -310,7 +311,7 @@
      "deseeded",
      "pmkisan_land",
      "not_mapped",
-     "account_closed"
+     "mapper_other_bank"
     ]
    }
   },
@@ -410,6 +411,7 @@
     "stopped": [
      "deseeded",
      "not_mapped",
+     "mapper_other_bank",
      "account_closed"
     ]
    }
@@ -455,15 +457,20 @@
     {
      "cause": "deseeded",
      "check": "myaadhaar"
+    },
+    {
+     "cause": "mapper_other_bank",
+     "check": "myaadhaar"
     }
    ],
-   "divergence": "Answering 'stopped', she would not see 'seeded to another bank account'; it shows only if she answers that the money goes to another account. The app's second reason (de-seeding) sends her to myAadhaar Bank seeding status, which shows the bank her Aadhaar is seeded to, here SBI. The result warns that some departments pay arrears for only 6 months or 1 year, citing this decision.",
+   "divergence": "Answering \"stopped\", she now sees \"seeded to another bank account\" fourth, after the inoperative-account, de-seeding and not-seeded reasons; until 8 November 2026 it showed only if she answered that the money goes to another account. Its check sends her to myAadhaar Bank seeding status, which shows the bank her Aadhaar is seeded to, here SBI. The result warns that some departments pay arrears for only 6 months or 1 year, citing this decision.",
    "code": null,
    "replay": {
     "stopped": [
      "inoperative",
      "deseeded",
      "not_mapped",
+     "mapper_other_bank",
      "account_closed"
     ]
    },
@@ -576,6 +583,7 @@
     "stopped": [
      "deseeded",
      "not_mapped",
+     "mapper_other_bank",
      "account_closed"
     ],
     "other_account": [
@@ -648,6 +656,7 @@
     "stopped": [
      "deseeded",
      "not_mapped",
+     "mapper_other_bank",
      "account_closed"
     ],
     "other_account": [

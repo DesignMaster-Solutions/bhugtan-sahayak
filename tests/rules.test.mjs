@@ -208,3 +208,13 @@ test('no output of any rules.js function contains a 12-digit number (an Aadhaar-
   }
   for (const o of outs) assert.doesNotMatch(JSON.stringify(o), /\d{12}/);
 });
+
+// CIC, 3 Oct 2019 (Sushila): a pension that "stopped" was being credited to the other bank account seeded to
+// her Aadhaar. The mapper pays the last seeded bank, so a stopped payment must list it without her guessing.
+test('rule: stopped lists the other seeded bank account, before account closure', () => {
+  for (const lastReceived of LAST) {
+    const r = at({ ...base, lastReceived });
+    assert.ok(r.includes('mapper_other_bank'), lastReceived);
+    assert.ok(r.indexOf('mapper_other_bank') < r.indexOf('account_closed'), lastReceived);
+  }
+});
