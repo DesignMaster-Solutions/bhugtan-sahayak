@@ -183,3 +183,14 @@ appear in the app as a rule, number, path or fee.
     CIC 3 Oct 2019 (Delhi widow pension): "amount pertaining to only 6 months is provided in such cases";
     CIC 16 Jan 2025 (Delhi disability pension, office order of 04.08.2023): "arrears for a maximum period of
     one year only". The app warns to act soon and names no amount.
+17. **A stop put by the office, or an account changed on the record (added 08/11/2026).** RTI Online FAQ
+    (DoPT, rtionline.gov.in/faq.php): "no RTI fee is required to be paid by a citizen who is below poverty
+    line, as per RTI Rules, 2012" (attach the BPL certificate); "As per RTI Act, no fee has to be paid for
+    first appeal"; first appeal "only after completion of stipulated time period of 30 days" without a
+    reply; the portal is for Central public authorities, "should not be filed for other Public authorities
+    under State Govt." CPGRAMS FAQ (DARPG, pgportal.gov.in/Home/Faq): "time limit for redress of
+    grievance? 21 days"; appeal "within 30 days"; State grievances "are sent to the State/ UT/ NCT
+    Government concerned". Cases: Dharam Lal Patel (Chhattisgarh HC, 18/07/2024: portal showed "stop
+    payment", officer to decide and tell him in four weeks) and Shahjahanpur (Allahabad HC, 25/01/2024: FIR
+    alleges pensioners' accounts changed by officials). (`sources/wb_rtionline_faq.txt`,
+    `sources/wb_pgportal_cpgrams_faq.txt`) The app names no fee amount and no statute section it did not read.

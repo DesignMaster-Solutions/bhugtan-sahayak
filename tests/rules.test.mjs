@@ -218,3 +218,18 @@ test('rule: stopped lists the other seeded bank account, before account closure'
     assert.ok(r.indexOf('mapper_other_bank') < r.indexOf('account_closed'), lastReceived);
   }
 });
+
+test('rule: a payment that stopped with nothing changed at the bank, or that went to another account, lists the office step (stop payment / record changed)', () => {
+  for (const i of ALL) {
+    if (i.symptom === 'stopped' && !i.changes.length) assert.ok(at(i).includes('office_stop'), label(i));
+    if (i.symptom === 'other_account' && !i.changes.length) assert.ok(at(i).includes('office_stop'), label(i));
+  }
+  // Bank-side reasons stay first: the office step is never the lead (PIB 2152566 names only bank-side causes).
+  for (const i of ALL) assert.notEqual(at(i)[0], 'office_stop', label(i));
+  assert.deepEqual(fixFor('office_stop').where, ['scheme_office']);
+  assert.equal(CAUSES.office_stop.letter, 'reason');
+  for (const p of ['written_reason', 'rti_route', 'cpgrams_route']) assert.ok(fixFor('office_stop').points.includes(p), p);
+  assert.ok(checksFor('office_stop', 'pmkisan').some((k) => k.id === 'pmkisan_status'));
+  assert.ok(checksFor('office_stop', 'pension').some((k) => k.id === 'nsap'));
+  assert.match(requestText('office_stop', 'en'), /reason/i);
+});

@@ -81,8 +81,14 @@ Every case has a `divergence` in `cases.json`. The main ones:
   the Aadhaar is seeded to, here SBI.
 - **Only part came.** Amit Yadav got Rs 4,400 of Rs 54,400; the app has no answer for "only part came", so the
   replay uses "it was rejected".
-- **Officials' steps the app does not cover.** A "stop payment" put on the portal with no reason (Dharam Lal
-  Patel) and accounts changed by an official (Shahjahanpur): the app has no step for these.
+- **Officials' steps, since 8 November 2026.** A "stop payment" put on the portal with no reason (Dharam Lal
+  Patel) and accounts changed by an official (Shahjahanpur) now have a step, `office_stop`: compare the account
+  on the scheme record with the passbook, ask the scheme office in writing for the reason and the correction,
+  then RTI (no fee below the poverty line, first appeal free and after 30 days, DoPT RTI Online FAQ) and a
+  CPGRAMS grievance (21 days, appeal within 30 days, DARPG FAQ). It is listed last for "stopped" with nothing
+  changed at the bank and third for "went to another account" (Dharam Lal sixth, the Shahjahanpur pensioners
+  third). The app still has no step to the police or the District Magistrate, which is where the Shahjahanpur
+  case began (an FIR).
 - **Where it matches.** e-KYC at a CSC or in the PM-KISAN app (Vishram Singh), land verification at the
   agriculture office (Rajendra; for Om Prakash Dubey the State named the tehsil), Aadhaar seeding at the bank branch (Geeta, Shrinivas Mishra),
   and the bank branch when the bank did not respond (Rajendra, as the CPIO advised).

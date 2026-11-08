@@ -123,13 +123,14 @@
      "pmkisan_land",
      "not_mapped",
      "mapper_other_bank",
-     "account_closed"
+     "office_stop"
     ],
     "other_account": [
      "mapper_other_bank",
      "pmkisan_ekyc",
      "pmkisan_land",
-     "credited_elsewhere"
+     "credited_elsewhere",
+     "office_stop"
     ],
     "paid_not_received": [
      "credited_elsewhere",
@@ -183,9 +184,15 @@
     {
      "cause": "pmkisan_ekyc",
      "check": "pmkisan_status"
+    },
+    {
+     "cause": "office_stop",
+     "check": "pmkisan_status",
+     "letter": "reason",
+     "where": "scheme_office"
     }
    ],
-   "divergence": "No cause is named, so nothing to match. The app's first check for his answers is the PM-KISAN status page, the page that showed 'stop payment'; the app has no cause for a stop entered by an officer and no step to demand the written reason.",
+   "divergence": "No cause is named, so nothing to match. The app's first check for his answers is the PM-KISAN status page, the page that showed 'stop payment'. Since 8 November 2026 the list for 'stopped' with nothing changed at the bank ends with 'the office stopped the payment or changed the account on your record': a written application at the scheme office for the reason and the account on record, then RTI (no fee below the poverty line, first appeal after 30 days) and a CPGRAMS grievance (21 days). It is last, after the bank-side reasons the Government publishes; the court's order was the same step, the officer to decide and tell him the reason.",
    "code": null,
    "replay": {
     "stopped": [
@@ -194,7 +201,7 @@
      "deseeded",
      "pmkisan_land",
      "not_mapped",
-     "mapper_other_bank"
+     "office_stop"
     ]
    }
   },
@@ -311,7 +318,7 @@
      "deseeded",
      "pmkisan_land",
      "not_mapped",
-     "mapper_other_bank"
+     "office_stop"
     ]
    }
   },
@@ -412,7 +419,8 @@
      "deseeded",
      "not_mapped",
      "mapper_other_bank",
-     "account_closed"
+     "account_closed",
+     "office_stop"
     ]
    }
   },
@@ -471,7 +479,8 @@
      "deseeded",
      "not_mapped",
      "mapper_other_bank",
-     "account_closed"
+     "account_closed",
+     "office_stop"
     ]
    },
    "arrears_limit": "6 months"
@@ -584,11 +593,13 @@
      "deseeded",
      "not_mapped",
      "mapper_other_bank",
-     "account_closed"
+     "account_closed",
+     "office_stop"
     ],
     "other_account": [
      "mapper_other_bank",
-     "credited_elsewhere"
+     "credited_elsewhere",
+     "office_stop"
     ],
     "paid_not_received": [
      "credited_elsewhere",
@@ -643,9 +654,15 @@
      "cause": "credited_elsewhere",
      "check": "nsap",
      "letter": "utr"
+    },
+    {
+     "cause": "office_stop",
+     "check": "nsap",
+     "letter": "reason",
+     "where": "scheme_office"
     }
    ],
-   "divergence": "These are allegations in an FIR, not findings. A pensioner sees 'sent to a different account' by answering that the status says paid (first) or that it went to another account (second); the app's step is to trace the UTR at the bank, and it has no step for an account changed by an official (complaint to the District Magistrate or police).",
+   "divergence": "These are allegations in an FIR, not findings. A pensioner sees 'sent to a different account' by answering that the status says paid (first) or that it went to another account (second); the app's step is to trace the UTR at the bank. Since 8 November 2026 'went to another account' also lists, third, 'the office stopped the payment or changed the account on your record': compare the account on the NSAP record with the passbook, ask the office in writing to correct it and say who changed it, then RTI and a CPGRAMS grievance. The app still has no step to the police or the District Magistrate; this decision is about the officer's bail, not about how the pensioners were paid.",
    "code": null,
    "replay": {
     "never_came": [
@@ -657,11 +674,13 @@
      "deseeded",
      "not_mapped",
      "mapper_other_bank",
-     "account_closed"
+     "account_closed",
+     "office_stop"
     ],
     "other_account": [
      "mapper_other_bank",
-     "credited_elsewhere"
+     "credited_elsewhere",
+     "office_stop"
     ],
     "paid_not_received": [
      "credited_elsewhere",

@@ -21,6 +21,8 @@ export const SOURCES = {
   pib_2112199: { name: 'PIB 2112199 (18/03/2025): MGNREGA wages through ABPS', url: PIB(2112199) },
   pmkisan: { name: 'PM-KISAN: Know Your Status', url: 'https://pmkisan.gov.in/BeneficiaryStatus_New.aspx' },
   pfms: { name: 'PFMS: Know Your Payments', url: 'https://pfms.nic.in/static/KnowYourPayment_new.aspx' },
+  rti_online: { name: 'RTI Online (DoPT) FAQ: no fee below the poverty line, first appeal free and after 30 days', url: 'https://rtionline.gov.in/faq.php' },
+  cpgrams: { name: 'CPGRAMS (DARPG) FAQ: 21 days to redress, appeal within 30 days', url: 'https://pgportal.gov.in/Home/Faq' },
 };
 
 // items = BRIEF "Verified" item numbers; codes = APB return codes (item 2); points = extra i18n lines (p_*).
@@ -38,6 +40,7 @@ export const CAUSES = {
   record_aadhaar: { items: [13], codes: [], src: ['pib_2152566', 'pib_1739603'], fix: ['scheme_office'], carry: ['aadhaar_card'], letter: 'record', points: ['record_state'] },
   name_mismatch: { items: [13, 14], codes: [], src: ['uidai_faq', 'pib_2152566'], fix: ['scheme_office', 'aadhaar_centre'], carry: ['passbook', 'aadhaar_card'], letter: 'name', points: ['record_state'] },
   bank_limit: { items: [15], codes: ['57', '58'], src: ['apb_sop'], fix: ['bank_branch'], carry: ['passbook', 'aadhaar_card'], letter: 'limit', points: ['limit_not_for_dbt', 'jandhan_bsbd'] },
+  office_stop: { items: [17], codes: [], src: ['rti_online', 'cpgrams'], fix: ['scheme_office'], carry: ['passbook', 'aadhaar_card'], letter: 'reason', points: ['written_reason', 'rti_route', 'cpgrams_route'] },
 };
 
 // Shown on every result: two published decisions where arrears were cut after a failed payment (item 16).
@@ -75,6 +78,7 @@ const CAUSE_CHECKS = {
   record_aadhaar: (s) => [s],
   name_mismatch: (s) => [s, 'pfms'],
   bank_limit: (s) => [s, 'pfms'],
+  office_stop: (s) => [s, 'pfms'],
 };
 
 const has = (arr, x) => Array.isArray(arr) && arr.includes(x);
@@ -97,8 +101,8 @@ export function likelyCauses({ scheme, symptom, lastReceived, changes = [], ekyc
   // Base lead per symptom, then the scheme blocks, then the rest of the usual reasons (PIB 2152566 order).
   const BASE = {
     never_came: ['not_mapped', 'mapper_other_bank', 'name_mismatch'],
-    stopped: ['deseeded', 'not_mapped', 'mapper_other_bank', 'account_closed'],
-    other_account: ['mapper_other_bank', 'credited_elsewhere'],
+    stopped: ['deseeded', 'not_mapped', 'mapper_other_bank', 'account_closed', 'office_stop'],
+    other_account: ['mapper_other_bank', 'credited_elsewhere', 'office_stop'],
     paid_not_received: ['credited_elsewhere', 'mapper_other_bank', 'account_closed'],
     rejected: ['not_mapped', 'deseeded', 'account_closed', 'kyc_frozen', 'inoperative', 'bank_limit'],
   }[symptom] || ['not_mapped'];
@@ -110,7 +114,8 @@ export function likelyCauses({ scheme, symptom, lastReceived, changes = [], ekyc
   push(...BASE.slice(1));
   // At most 6 (the official PM-KISAN failure list a farmer can fix has 6); trim from the end but never drop a
   // cause the answers make certain to list.
-  const must = new Set([old && 'inoperative', scheme === 'mgnrega' && 'mgnrega_abps', pm && land !== 'yes' && 'pmkisan_land'].filter(Boolean));
+  // Stopped with nothing changed at the bank: the stop may be the office's (Dharam Lal Patel, Chhattisgarh HC 2024), so keep that step.
+  const must = new Set([old && 'inoperative', scheme === 'mgnrega' && 'mgnrega_abps', pm && land !== 'yes' && 'pmkisan_land', symptom === 'stopped' && !changes.length && 'office_stop'].filter(Boolean));
   while (out.length > 6) {
     const i = out.findLastIndex((id) => !must.has(id));
     out.splice(i, 1);

@@ -75,7 +75,11 @@ npx wrangler deploy
    `bank_limit`, and the other reasons PIB 2152566 names (de-seeding, non-mapping, account closure; for a
    payment that stopped, the other bank account seeded to the Aadhaar comes before closure, as in CIC 2019
    Sushila, whose pension was going to her other Aadhaar-linked account), then never came `name_mismatch`,
-   went to another account `credited_elsewhere`, rejected `bank_limit`.
+   went to another account `credited_elsewhere`, rejected `bank_limit`. Last, for a payment that stopped
+   with nothing changed at the bank, or that went to another account: `office_stop`, a stop put by the office
+   or an account changed on the record (Dharam Lal Patel, Chhattisgarh HC 2024; Shahjahanpur, Allahabad HC
+   2024), never the lead because the Government's published failure reasons are all bank-side, and never
+   trimmed when nothing changed at the bank.
 7. At most 6 reasons (the official PM-KISAN failure list a farmer can fix has 6), trimmed from the end.
 
 Every result also shows one warning: "Act soon. In two published decisions, after a failed payment the
@@ -178,7 +182,12 @@ number on the scheme record, a name and bank details mismatch, a credit limit). 
 official source and its own letter, so the cause is one the app has in 10 of 12 (the other 2 decisions name no
 cause); for the 7 where the decision says what the person saw, the app lists it in 6. Every result also warns
 that arrears can be cut to 6 months or 1 year, citing the two decisions that did it. Every remaining difference
-is written down in `evidence/real-cases/README.md`. This is a replay of real cases, not use in the field.
+is written down in `evidence/real-cases/README.md`. The two officials' steps the replay found missing, a "stop
+payment" on the portal with no reason (Dharam Lal Patel) and an account changed by an official (Shahjahanpur),
+have a step since 8 November 2026: `office_stop`, the written reason and the account on record asked at the
+scheme office, then an RTI application (no fee below the poverty line, first appeal free and after 30 days,
+per the DoPT RTI Online FAQ) and a CPGRAMS grievance (21 days, appeal within 30, per the DARPG FAQ). This is a
+replay of real cases, not use in the field.
 
 ## Privacy and usage numbers
 
