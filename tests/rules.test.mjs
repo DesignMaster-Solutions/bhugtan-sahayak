@@ -206,7 +206,8 @@ test('no output of any rules.js function contains a 12-digit number (an Aadhaar-
     outs.push(fixFor(id), requestText(id, 'en'), requestText(id, 'hi'));
     for (const s of SCHEMES) outs.push(checksFor(id, s));
   }
-  for (const o of outs) assert.doesNotMatch(JSON.stringify(o), /\d{12}/);
+  // official source URLs are not user data (the PIB FAQ file name has 13 digits)
+  for (const o of outs) assert.doesNotMatch(JSON.stringify(o).replace(/https?:\/\/[^"]+/g, ''), /\d{12}/);
 });
 
 // CIC, 3 Oct 2019 (Sushila): a pension that "stopped" was being credited to the other bank account seeded to

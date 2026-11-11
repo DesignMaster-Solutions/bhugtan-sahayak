@@ -1,7 +1,7 @@
 # Bhugtan Sahayak (भुगतान सहायक)
 
 A free, open-source helper for a person in India whose **government payment did not arrive**: a
-PM-KISAN instalment, an old-age, widow or disability pension, MGNREGA wages, a scholarship, an LPG
+PM-KISAN instalment, an old-age, widow or disability pension, MGNREGA (now VB-G RAM G) wages, a scholarship, an LPG
 subsidy or a State cash scheme that was approved but never reached the bank account, stopped,
 went to another account, shows "paid" but is not in the passbook, or was rejected.
 
@@ -105,7 +105,7 @@ pfms.nic.in, nsap.nic.in, ippbonline.com and npci.org.in do not answer from outs
 | `kyc_frozen` | Return codes 51 / 68 | 2 | APB SOP |
 | `pmkisan_ekyc` | e-KYC mandatory; OTP (pmkisan.gov.in or app), biometric at a CSC, face authentication in the app | 6 | PIB 2112399, <https://www.pib.gov.in/PressReleasePage.aspx?PRID=2112399>; PIB 2330414, <https://www.pib.gov.in/PressReleasePage.aspx?PRID=2330414> |
 | `pmkisan_land` | Land seeding mandatory; ask your village / block agriculture office | 6 | PIB 2112399 |
-| `mgnrega_abps` | ABPS mandatory from 1 January 2024; if APBS fails, NACH to the account | 8 | PIB 2112199, <https://www.pib.gov.in/PressReleasePage.aspx?PRID=2112199> |
+| `mgnrega_abps` | ABPS mandatory from 1 January 2024; if APBS fails, NACH to the account. MGNREGA was repealed on 1 July 2026 and the work is now under the VB-G RAM G Act: a Job Card with e-KYC done stays valid until the Gramin Rozgar Guarantee Card is issued; wages within 15 days of the muster roll closing, then 0.05% a day of delay compensation | 8 | PIB 2112199, <https://www.pib.gov.in/PressReleasePage.aspx?PRID=2112199>; PIB FAQ on the VB-G RAM G Act (11/05/2026, Q3, Q12, Q20 to Q22), <https://static.pib.gov.in/WriteReadData/specificdocs/documents/2026/may/doc2026511867701.pdf> |
 | `credited_elsewhere` | Note the UTR and bank on Know Your Status or PFMS Know Your Payments and take the UTR to that bank | 6, 9 | PM-KISAN Know Your Status; PFMS Know Your Payments |
 | `record_aadhaar` | The Aadhaar number on the scheme record is wrong; a record with wrong data goes back to the State for correction; ask the scheme office (agriculture office for PM-KISAN) to correct it or say which form to fill again | 13 | PIB 2152566; PIB 1739603 ("Correction Module"), <https://www.pib.gov.in/PressReleasePage.aspx?PRID=1739603> |
 | `name_mismatch` | Name or bank details do not match the scheme record; scheme office corrects the record, an Aadhaar Enrolment / Update Centre corrects the name on Aadhaar | 13, 14 | UIDAI DBT FAQ; PIB 2152566 |

@@ -48,3 +48,20 @@ test('coverage numbers in the README', () => {
   assert.deepEqual([y2025.filter((o) => o.cause).length, y2025.length], [3, 3]);
   assert.deepEqual([y2021.filter((o) => o.cause).length, y2021.filter((o) => o.why === 'gap').length, y2021.filter((o) => !o.cause && o.why !== 'gap').length, y2021.length], [6, 0, 3, 9]);
 });
+
+// MGNREGA was repealed on 1 July 2026 (PIB FAQ on the VB-G RAM G Act, 11/05/2026, Q3, Q12, Q20-22).
+test('wages: the option and the reason name VB-G RAM G, the job card rule and delay compensation, in en and hi', async () => {
+  const { STRINGS } = await import('../i18n.js');
+  const { fixFor } = await import('../rules.js');
+  const f = fixFor('mgnrega_abps');
+  assert.ok(f.source.some((s) => /VB-G RAM G/.test(s.name) && /pib\.gov\.in/.test(s.url)));
+  for (const p of ['job_card', 'delay_comp']) assert.ok(f.points.includes(p), p);
+  assert.match(STRINGS.en.o_mgnrega, /VB-G RAM G/);
+  assert.match(STRINGS.hi.o_mgnrega, /जी राम जी/);
+  assert.match(STRINGS.en.d_mgnrega_abps, /1 July 2026/);
+  assert.match(STRINGS.hi.d_mgnrega_abps, /1 जुलाई 2026/);
+  for (const lang of ['en', 'hi']) {
+    assert.match(STRINGS[lang].p_delay_comp, /0\.05%/);
+    assert.match(STRINGS[lang].p_job_card, /e-KYC|ई-केवाईसी/);
+  }
+});
