@@ -36,3 +36,9 @@ test('robots.txt, sitemap.xml and the IndexNow key are real files and the SPA fa
   assert.match(toml, /not_found_handling = "none"/);
   assert.doesNotMatch(toml, /single-page-application/);
 });
+
+// MGNREGA was repealed on 1 July 2026: what Google and the share card show must name the current Act too.
+test('description, og:description and JSON-LD name VB-G RAM G next to MGNREGA', () => {
+  assert.equal((html.match(/MGNREGA \/ VB-G RAM G wages/g) || []).length, 3);
+  assert.doesNotMatch(html, /pension, MGNREGA wages/);
+});
