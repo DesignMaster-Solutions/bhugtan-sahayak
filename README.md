@@ -201,7 +201,7 @@ or phone numbers, no IP. `?nostats` sends nothing.
 
 ## Tests
 
-`npm test` (87 tests; the first 27 written before the code they test):
+`npm test` (96 tests; the first 27 written before the code they test):
 
 - every scheme x symptom x last-received x changes (x PM-KISAN answers) gives 1 to 6 known causes,
   no duplicates; every cause has at least one official `https` check for every scheme and a fix
@@ -222,7 +222,10 @@ or phone numbers, no IP. `?nostats` sends nothing.
 - `en` and `hi` have exactly the same keys and no empty string;
 - `styles.css` keeps `[hidden]` elements hidden (added after the walk-through on a real browser found "Next" showing on single-choice steps, where it skipped a question unanswered);
 - the Worker counts valid events and rejects bad ones (405 wrong method, 400 bad event / language /
-  cause / JSON, 404 unknown `/api` path); the real counter lines of `app.js` send nothing with `?nostats`.
+  cause / JSON, 404 unknown `/api` path); the real counter lines of `app.js` send nothing with `?nostats`;
+- the app opens offline after the first visit (`sw.js`, network first, cache only when the network
+  fails, `/api/` never cached): `tests/offline.test.mjs` checks that every file the first screen
+  needs is precached and that `app.js` registers the worker.
 
 ### Mutation check (05/11/2026)
 

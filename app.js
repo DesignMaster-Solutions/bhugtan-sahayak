@@ -193,3 +193,6 @@ for (const b of document.querySelectorAll('[data-lang]')) {
 }
 globalThis.speechSynthesis?.addEventListener?.('voiceschanged', () => view === 'result' && renderResult());
 render();
+
+// Opens offline after the first visit (sw.js): the questions, the rules and the request need no network.
+navigator.serviceWorker?.register('sw.js').catch(() => {});
