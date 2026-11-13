@@ -140,3 +140,24 @@ export function requestText(cause, lang) {
   const k = CAUSES[cause].letter;
   return [t[`l_to_${k}`], '', t[`l_subject_${k}`], '', t.l_greet, t[`l_body_${k}`], '', t.l_fields, '', t.l_close].join('\n');
 }
+
+// Link that opens straight on the same result for whoever receives it. Only the language and the
+// answers travel (e-KYC and land only for PM-KISAN): nothing typed, no name, account or Aadhaar.
+export function shareUrl(origin, a, lang) {
+  const p = new URLSearchParams({ lang, scheme: a.scheme, symptom: a.symptom, last: a.last, changes: (a.changes || []).join(',') });
+  if (a.scheme === 'pmkisan') { p.set('ekyc', a.ekyc); p.set('land', a.land); }
+  return `${origin}/?${p}`;
+}
+
+// Answers from a shared link, or null unless every question asked for that scheme has one of its own options.
+export function answersFrom(search) {
+  const p = new URLSearchParams(search);
+  const ynu = (k) => ['yes', 'no', 'unsure'].includes(p.get(k));
+  const changes = (p.get('changes') || '').split(',').filter(Boolean);
+  const ok = SCHEMES.includes(p.get('scheme')) && SYMPTOMS.includes(p.get('symptom')) && LAST.includes(p.get('last'))
+    && p.has('changes') && changes.every((c) => CHANGES.includes(c));
+  if (!ok) return null;
+  const a = { scheme: p.get('scheme'), symptom: p.get('symptom'), last: p.get('last'), changes: [...new Set(changes)] };
+  if (a.scheme !== 'pmkisan') return a;
+  return ynu('ekyc') && ynu('land') ? { ...a, ekyc: p.get('ekyc'), land: p.get('land') } : null;
+}

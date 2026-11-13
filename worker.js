@@ -3,7 +3,7 @@
 // One Durable Object holds the counts, so increments are atomic. GET /api/stats is public.
 import { CAUSES } from './rules.js';
 
-const EVENTS = new Set(['diagnose', 'copy', 'share', 'worked_yes', 'worked_no', 'worked_notyet']);
+const EVENTS = new Set(['diagnose', 'copy', 'share', 'share_link', 'worked_yes', 'worked_no', 'worked_notyet']);
 const LANGS = new Set(['en', 'hi']);
 
 export class Counter {

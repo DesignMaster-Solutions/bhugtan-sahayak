@@ -1,4 +1,4 @@
-import { likelyCauses, checksFor, fixFor, requestText, ARREARS, SCHEMES, SYMPTOMS, LAST, CHANGES } from './rules.js';
+import { likelyCauses, checksFor, fixFor, requestText, shareUrl, answersFrom, ARREARS, SCHEMES, SYMPTOMS, LAST, CHANGES } from './rules.js';
 import { STRINGS } from './i18n.js';
 
 const $ = (id) => document.getElementById(id);
@@ -177,6 +177,7 @@ function renderResult() {
   $('arrears').replaceChildren(el('b', { textContent: t(ARREARS.note) }), ` ${t('source_label')}: `,
     ...ARREARS.source.flatMap((s, j) => [j ? ' · ' : '', el('a', { href: s.url, target: '_blank', rel: 'noopener', textContent: s.name })]));
   $('causes').replaceChildren(...causes.map(causeCard));
+  $('pass').href = `https://wa.me/?text=${encodeURIComponent(`${t('pass_text')} ${shareUrl(location.origin, answers, lang)}`)}`;
   $('worked-btns').hidden = worked;
   $('worked-thanks').hidden = !worked;
 }
@@ -185,6 +186,7 @@ $('start').onclick = () => { answers = {}; index = 0; show('quiz'); };
 $('next').onclick = () => { answers.changes ||= []; advance(); };
 $('back').onclick = () => { if (index > 0) { index--; renderQuestion(); } else show('intro'); };
 $('restart').onclick = () => show('intro');
+$('pass').onclick = () => count('share_link');
 for (const b of document.querySelectorAll('[data-worked]')) {
   b.onclick = () => { worked = true; count(`worked_${b.dataset.worked}`); renderResult(); };
 }
@@ -192,7 +194,9 @@ for (const b of document.querySelectorAll('[data-lang]')) {
   b.onclick = () => { lang = b.dataset.lang; localStorage.setItem('bs-lang', lang); render(); };
 }
 globalThis.speechSynthesis?.addEventListener?.('voiceschanged', () => view === 'result' && renderResult());
-render();
+// A link sent by a relative opens straight on the result they saw (not counted as a diagnosis).
+const shared = answersFrom(location.search);
+if (shared) { answers = shared; causes = likelyCauses(input()); show('result'); } else render();
 
 // Opens offline after the first visit (sw.js): the questions, the rules and the request need no network.
 navigator.serviceWorker?.register('sw.js').catch(() => {});

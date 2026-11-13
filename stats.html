@@ -20,23 +20,23 @@
     <h2>Top reason shown</h2>
     <table id="causes"><thead><tr><th>Reason</th><th>Diagnoses</th></tr></thead><tbody></tbody></table>
     <h2>By language</h2>
-    <table id="langs"><thead><tr><th></th><th>Diagnoses</th><th>Copied</th><th>Shared</th><th>Yes</th><th>No</th><th>Not yet</th></tr></thead><tbody></tbody></table>
+    <table id="langs"><thead><tr><th></th><th>Diagnoses</th><th>Copied</th><th>Shared</th><th>Result links</th><th>Yes</th><th>No</th><th>Not yet</th></tr></thead><tbody></tbody></table>
     <h2>By day (UTC)</h2>
-    <table id="days"><thead><tr><th>Day</th><th>Diagnoses</th><th>Copied</th><th>Shared</th><th>Yes</th><th>No</th><th>Not yet</th></tr></thead><tbody></tbody></table>
-    <p class="hint">Diagnoses = people who answered every question and saw the result. Copied / Shared = request letters copied or sent on WhatsApp. Yes / No / Not yet = answers to "Did it work?".</p>
+    <table id="days"><thead><tr><th>Day</th><th>Diagnoses</th><th>Copied</th><th>Shared</th><th>Result links</th><th>Yes</th><th>No</th><th>Not yet</th></tr></thead><tbody></tbody></table>
+    <p class="hint">Diagnoses = people who answered every question and saw the result. Copied / Shared = request letters copied or sent on WhatsApp. Result links = the result sent to someone else on WhatsApp. Yes / No / Not yet = answers to "Did it work?".</p>
   </main>
   <footer class="wrap foot"><p>Free and open-source: <a href="https://github.com/DesignMaster-Solutions/bhugtan-sahayak">github.com/DesignMaster-Solutions/bhugtan-sahayak</a></p></footer>
   <script type="module">
     import { STRINGS } from './i18n.js';
-    const EVENTS = ['diagnose', 'copy', 'share', 'worked_yes', 'worked_no', 'worked_notyet'];
-    const LABEL = { diagnose: 'Diagnoses', copy: 'Requests copied', share: 'Requests sent on WhatsApp', worked_yes: 'It worked', worked_no: 'It did not work', worked_notyet: 'Not yet' };
+    const EVENTS = ['diagnose', 'copy', 'share', 'share_link', 'worked_yes', 'worked_no', 'worked_notyet'];
+    const LABEL = { diagnose: 'Diagnoses', copy: 'Requests copied', share: 'Requests sent on WhatsApp', share_link: 'Result link sent to someone else', worked_yes: 'It worked', worked_no: 'It did not work', worked_notyet: 'Not yet' };
     const { since, counts } = await (await fetch('/api/stats', { cache: 'no-store' })).json();
     const esc = (s) => String(s).replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
     const row = (cells) => `<tr>${cells.map((c, i) => (i === 0 ? `<th>${esc(c)}</th>` : `<td>${esc(c)}</td>`)).join('')}</tr>`;
     const n = (k) => counts[k] || 0;
     document.getElementById('since').textContent = since;
-    document.querySelector('#totals tbody').innerHTML = EVENTS.slice(0, 3).map((e) => row([LABEL[e], n(`total:${e}`)])).join('');
-    document.querySelector('#worked tbody').innerHTML = EVENTS.slice(3).map((e) => row([LABEL[e], n(`total:${e}`)])).join('');
+    document.querySelector('#totals tbody').innerHTML = EVENTS.slice(0, 4).map((e) => row([LABEL[e], n(`total:${e}`)])).join('');
+    document.querySelector('#worked tbody').innerHTML = EVENTS.slice(4).map((e) => row([LABEL[e], n(`total:${e}`)])).join('');
     const causes = Object.keys(counts).filter((k) => k.startsWith('cause:')).sort((a, b) => counts[b] - counts[a]);
     document.querySelector('#causes tbody').innerHTML = causes.map((k) => row([STRINGS.en[`c_${k.slice(6)}`] || k.slice(6), counts[k]])).join('');
     const group = (prefix) => [...new Set(Object.keys(counts).filter((k) => k.startsWith(prefix)).map((k) => k.split(':')[1]))].sort();

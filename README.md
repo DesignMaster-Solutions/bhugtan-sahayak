@@ -193,7 +193,7 @@ replay of real cases, not use in the field.
 
 Live and public at `/stats` (JSON at `/api/stats`). The app sends, with `navigator.sendBeacon`,
 only these events, each with the language: `diagnose` (result shown, plus the id of the top cause
-only, e.g. `inoperative`), `copy`, `share`, `worked_yes`, `worked_no`, `worked_notyet`. The Worker
+only, e.g. `inoperative`), `copy`, `share`, `share_link` (the result link sent to a relative), `worked_yes`, `worked_no`, `worked_notyet`. The Worker
 rejects anything else (unknown event, language or cause, a cause on any other event, broken JSON)
 and stores only totals, per language, per day (UTC) and per top cause in one Durable Object.
 Nothing else is sent or stored: no scheme answers beyond the cause id, no names, no Aadhaar, bank
